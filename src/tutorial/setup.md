@@ -1,27 +1,22 @@
-# Project setup
+# 프로젝트 준비
 
-If you haven’t already,
-[install Rust] on your computer
-(it should only take a few minutes).
-After that, open a terminal and navigate to the directory
-you want to put your application code into.
+아직 컴퓨터에 [러스트를 설치]하지 않았다면 설치하세요. (몇 분 정도만 걸립니다)
+이어서, 터미널을 열고 애플리케이션 코드를 위치할 디렉토리로 이동하세요.
 
-[install Rust]: https://www.rust-lang.org/tools/install
+[러스트를 설치]: https://www.rust-lang.org/tools/install
 
-Start by running
-`cargo new grrs`
-in the directory you store your programming projects in.
-If you look at the newly created `grrs` directory,
-you’ll find a typical setup for a Rust project:
+프로그래밍 프로젝트를 보관할 디렉토리에서
+`cargo new grrs`를 실행해 프로젝트를 시작하세요.
+`grrs` 디렉토리가 새롭게 만들어졌다면,
+일반적인 러스트 프로젝트 파일을 확인할 수 있을 것입니다:
 
-- A `Cargo.toml` file that contains metadata for our project,
-  incl. a list of dependencies/external libraries we use.
-- A `src/main.rs` file that is the entry point for our (main) binary.
+- `Cargo.toml`: 프로젝트의 메타데이터와 프로젝트에서 사용할 디펜던시/외부 라이브러리 목록을 담고있는 파일.
+- `src/main.rs`: 프로그램 바이너리(main)의 엔트리포인트 파일.
 
-If you can execute `cargo run` in the `grrs` directory
-and get a "Hello World", you’re all set up.
+`grrs` 디렉토리에서 `cargo run`을 실행했을 때
+"Hello World"가 출력된다면 모든 준비를 마친 것입니다.
 
-## What it might look like
+## 이렇게 보여야 합니다
 
 ```console
 $ cargo new grrs
