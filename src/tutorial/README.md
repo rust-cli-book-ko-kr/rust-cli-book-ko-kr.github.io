@@ -1,59 +1,49 @@
-# Learning Rust by Writing a Command Line App in 15 Minutes
+# 15분 안에 커맨드라인 앱을 작성하며 러스트 배우기
 
-This tutorial will guide you through writing
-a CLI (command line interface) application
-in [Rust].
-It will take you roughly fifteen minutes
-to get to a point where you have a running program
-(around chapter 1.3).
-After that, we'll continue to tweak our program
-until we reach a point where we can ship our little tool.
+이 튜토리얼에서는 러스트로 CLI(command line interface) 애플리케이션을
+작성하는 방법에 대해 설명할 것입니다.
+프로그램을 실행하게 되는 지점(챕터 1.3쯤)까지 대략 15분 정도가 걸릴 수 있습니다.
+그 이후에는 이 작은 프로그램을 배포할 수 있을 때까지 프로그램을 수정해 나갈 것입니다.
 
-[Rust]: https://rust-lang.org/
+[러스트]: https://rust-lang.org/
 
-You’ll learn all the essentials about how to get going,
-and where to find more information.
-Feel free to skip parts you don't need to know right now
-or jump in at any point.
+여러분은 무엇을 어떻게 해야 하는지에 관한 필수적인 것들을 배우게 되며,
+어디에서 더 많은 정보를 찾을 수 있는지에 대해서도 배울 것입니다.
+당장 필요하지 않은 부분은 과감히 뛰어넘거나, 혹은 더 깊이 알아보세요.
 
 <aside>
 
-**Prerequisites:**
-This tutorial does not replace a general introduction to programming,
-and expects you to be familiar with a few common concepts.
-You should be comfortable with using a command line/terminal.
-If you already know a few other languages,
-this can be a good first contact with Rust.
+**선행지식:**
+이 튜토리얼은 프로그래밍에 대한 입문 과정을 다루지 않으며,
+여러분이 몇 가지 일반적인 개념에 친숙할 것이라고 가정합니다.
+여러분은 커맨드라인/터미널을 사용하는 데 어려움이 없어야 합니다.
+이미 다른 언어를 몇 개 알고 있다면, 이 튜토리얼은 러스트와의 좋은 첫 만남이 될 것입니다.
 
-**Getting help:**
-If you at any point feel overwhelmed or confused with the features used,
-have a look at the extensive official documentation that comes with Rust,
-first and foremost the book,
-The Rust Programming Language.
-It comes with most Rust installations
-(`rustup doc`),
-and is available online on [doc.rust-lang.org].
+**도움받기:**
+튜토리얼에서 사용하는 기능에 혼란스러움을 느끼거나, 압도된다면
+러스트가 제공하는 광범위한 공식 문서를 살펴보세요.
+가장 먼저 확인할 책은 The Rust Programming Language입니다.
+이는 대부분의 러스트 설치 과정(`rustup doc`)에 함께 제공되며,
+[doc.rust-lang.org]에서 온라인으로 찾아볼 수 있습니다.
 
 [doc.rust-lang.org]: https://doc.rust-lang.org
 
-You are also very welcome to ask questions –
-the Rust community is known to be friendly and helpful.
-Have a look at the [community page]
-to see a list of places where people discuss Rust.
+질문도 매우 환영합니다.
+러스트 커뮤니티는 친절하고, 유용한 것으로 알려져 있습니다.
+[커뮤니티 페이지]에서 러스트에 대해 논의하는 곳의 목록을 확인해 보세요.
 
-[community page]: https://www.rust-lang.org/community
+[커뮤니티 페이지]: https://www.rust-lang.org/community
 
 </aside>
 
-What kind of project do you want to write?
-How about we start with something simple:
-Let’s write a small `grep` clone.
-That is a tool that we can give a string and a path
-and it’ll print only the lines that contain the given string.
-Let’s call it `grrs` (pronounced “grass”).
+어떤 종류의 프로젝트를 하고 싶나요?
+먼저 간단한 것부터 시작해봅시다:
+우리는 작은 `grep` 클론을 작성해볼 것입니다.
+이 프로그램은 문자열과 경로를 받으면 주어진 문자열을 포함한
+라인만을 출력해주는 도구입니다.
+이를 `grrs`라고 부릅시다. ("그래스"라고 발음합니다.)
 
-In the end,
-we want to be able to run our tool like this:
+최종적으로 우리의 프로그램은 아래와 같이 실행합니다:
 
 ```console
 $ cat test.txt
@@ -68,15 +58,15 @@ $ grrs --help
 
 <aside class="note">
 
-**Note:**
-This book is written for [Rust 2018].
-The code examples can also be used on Rust 2015,
-but you might need to tweak them a bit;
-add `extern crate foo;` invocations, for example.
+**주의:**
+이 책은 [Rust 2018]을 위해 작성되었습니다.
+코드 예시는 Rust 2015에서도 사용할 수 있지만,
+예시를 조금 수정해야 할 수도 있습니다.
+가령, `extern crate foo;` 호출을 추가해야 할 수 있습니다.
 
-Make sure you run Rust 1.31.0 (or later)
-and that you have `edition = "2018"` set
-in the `[package]` section of your `Cargo.toml` file.
+Rust 1.31.0 (또는 그 이후 버전)을 사용하고 있는지 확인하고,
+`Cargo.toml` 파일의 `[package]` 섹션에
+`edition = "2018"`이 설정되어 있는지 확인하세요.
 
 [Rust 2018]: https://doc.rust-lang.org/edition-guide/index.html
 
