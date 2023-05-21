@@ -1,15 +1,15 @@
-# First implementation of _grrs_
+# _grrs_의 첫 구현
 
-After the last chapter on command line arguments,
-we have our input data,
-and we can start to write our actual tool.
-Our `main` function only contains this line right now:
+지난 챕터에서 커맨드라인 인자를 다룬 뒤
+우리는 입력 데이터를 얻었고,
+실제 프로그램 작성을 시작할 수 있게 되었습니다.
+지금은 `main` 함수에 아래 한 줄만 있습니다:
 
 ```rust,ignore
 {{#include impl-draft.rs:15:15}}
 ```
 
-Let’s start by opening the file we got.
+이제 입력받은 파일을 열어봅시다.
 
 ```rust,ignore
 {{#include impl-draft.rs:16:16}}
@@ -17,46 +17,44 @@ Let’s start by opening the file we got.
 
 <aside>
 
-**Note:**
-See that [`.expect`] method here?
-This is a shortcut function to quit that will make the program exit immediately
-when the value (in this case the input file)
-could not be read.
-It's not very pretty,
-and in the next chapter on [Nicer error reporting]
-we will look at how to improve this.
+**주의:**
+여기서 [`.expect`] 메서드가 보이시나요?
+이 메서드는 값(여기서는 입력 파일)을 읽을 수 없을 때
+프로그램을 즉시 종료하는 단축 함수입니다.
+이는 별로 좋은 방법이 아니며,
+다음 챕터 [더 나은 에러 보고]에서
+어떻게 개선할 수 있을지 살펴보겠습니다.
 
 [`.expect`]: https://doc.rust-lang.org/1.39.0/std/result/enum.Result.html#method.expect
-[Nicer error reporting]:./errors.html
+[더 나은 에러 보고]:./errors.html
 
 </aside>
 
-Now, let’s iterate over the lines
-and print each one that contains our pattern:
+이제 파일의 각 라인을 순회하며
+주어진 패턴을 포함하고 있는 라인을 출력해 봅시다:
 
 ```rust,ignore
 {{#include impl-draft.rs:18:22}}
 ```
 
-## Wrapping up
+## 마무리
 
-Your code should now look like:
+여러분의 코드는 이제 아래와 같아야 합니다:
 
 ```rust,ignore
 {{#include impl-draft.rs}}
 ```
 
-Give it a try: `cargo run -- main src/main.rs` should work now!
+`cargo run -- main src/main.rs`으로 잘 동작하는지 확인해 보세요!
 
 <aside class="exercise">
 
-**Exercise for the reader:**
-This is not the best implementation:
-It will read the whole file into memory
-– however large the file may be.
-Find a way to optimize it!
-(One idea might be to use a [`BufReader`]
-instead of `read_to_string()`.)
+**연습**
+이는 최선의 구현은 아닙니다.
+위 코드는 전체 파일을 읽어 메모리에 올리는데,
+큰 파일도 통째로 메모리에 올리게 됩니다.
+최적화할 수 있는 방법을 찾아보세요!
+(`read_to_string()` 대신 [`BufReader`]를 사용하는 방법을 생각해 볼 수 있습니다.)
 
 [`BufReader`]: https://doc.rust-lang.org/1.39.0/std/io/struct.BufReader.html
 
