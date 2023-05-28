@@ -1,44 +1,40 @@
-# Packaging and distributing a Rust tool
+# 러스트 도구를 패키징하고, 배포하기
 
-If you feel confident that your program is ready for other people to use,
-it is time to package and release it!
+다른 사람들에게 여러분의 프로그램을 공개할 수 있을 정도로 자신감이 생겼다면,
+이제 프로그램을 패키징하고 릴리즈할 때입니다!
 
-There are a few approaches,
-and we'll look at three of them
-from "quickest to set up" to "most convenient for users".
+여기에는 몇 가지 방법이 있는데,
+"가장 빠르게 배포하는 방법"부터 "사용자에게 가장 편리한 방법" 중
+세 개를 살펴볼 것입니다.
 
-## Quickest: `cargo publish`
+## 가장 빠른 방법: `cargo publish`
 
-The easiest way to publish your app is with cargo.
-Do you remember how we added external dependencies to our project?
-Cargo downloaded them from its default "crate registry", [crates.io].
-With `cargo publish`,
-you too can publish crates to [crates.io].
-And this works for all crates,
-including those with binary targets.
+앱을 공개하는 가장 쉬운 방법은 cargo를 이용하는 것입니다.
+프로젝트에 외부 디펜던시를 어떻게 추가하는지 기억하시나요?
+cargo는 기본 "크레이트 레지스트리"인 [crates.io]에서 해당하는
+디펜던시를 다운로드합니다.
+`cargo publish`를 이용하면 바이너리 타겟을 비롯한
+여러분의 크레이트를 [crates.io]에 공개할 수 있습니다.
 
-Publishing a crate to [crates.io] is pretty straightforward:
-If you haven't already, create an account on [crates.io].
-Currently, this is done via authorizing you on GitHub,
-so you'll need to have a GitHub account
-(and be logged in there).
-Next, you log in using cargo on your local machine.
-For that, go to your
-[crates.io account page],
-create a new token,
-and then run `cargo login <your-new-token>`.
-You only need to do this once per computer.
-You can learn more about this
-in cargo's [publishing guide].
+[crates.io]에 크레이트를 공개하는 것은 상당히 직관적입니다.
+우선 [crates.io]에 계정이 없다면 가입하세요.
+현재로써는 GitHub을 통해 인증을 해야 하므로,
+GitHub 계정도 필요합니다.
+그 다음엔, 로컬 머신에서 cargo를 이용해 로그인합니다.
+이를 위해, [crates.io 계정 페이지]에 들어가서
+새 토큰을 생성하고 `cargo login <새-토큰>`을 실행하세요.
+이 과정은 컴퓨터당 한 번만 하면 됩니다.
+cargo의 [퍼블리싱 가이드]에서 더 자세한
+내용을 배울 수 있습니다.
 
-Now that cargo as well as crates.io know you,
-you are ready to publish crates.
-Before you hastily go ahead and publish a new crate (version),
-it's a good idea to open your `Cargo.toml` once more
-and make sure you added the necessary metadata.
-You can find all the possible fields you can set
-in the documentation for [cargo's manifest format].
-Here's a quick overview of some common entries:
+이제 cargo는 crates.io에 따라 여러분을 알게 되었고,
+크레이트를 공개할 준비가 끝났습니다.
+새로운 크레이트(또는 새 버전)를 공개하기에 앞서,
+`Cargo.toml`을 열어 필수적인 메타데이터를 추가했는지
+한 번 더 봑인해 보는 것이 좋습니다.
+`Cargo.toml`에 설정할 수 있는 모든 필드는
+[cargo 매니페스트 형식]에서 찾아볼 수 있습니다.
+아래는 빠르게 참고할만한 일반적인 예시입니다:
 
 ```toml
 [package]
@@ -56,284 +52,261 @@ categories = ["command-line-utilities"]
 
 <aside class="note">
 
-**Note:**
-This example includes the mandatory license field
-with a common choice for Rust projects:
-The same license that is also used for the compiler itself.
-It also refers to a `README.md` file.
-It should include a quick description of what your project is about,
-and will be included not only on the crates.io page of your crate,
-but also what GitHub shows by default on repository pages.
+**참고:**
+이 예시에서는 러스트 프로젝트에 주로 채택하는 라이센스로
+필수 필드를 채웠습니다:
+러스트 컴파일러도 같은 라이센스를 사용하고 있습니다.
+또한 여기에서는 `README.md` 파일도 명시하고 있습니다.
+`README.md` 파일은 프로젝트에 대한 설명을 포함해야 하며,
+이 설명은 crates.io 페이지 뿐만 아니라
+GitHub의 저장소 페이지에도 노출됩니다.
 
 </aside>
 
 [crates.io]: https://crates.io/
-[crates.io account page]: https://crates.io/me
-[publishing guide]: https://doc.rust-lang.org/1.39.0/cargo/reference/publishing.html
-[cargo's manifest format]: https://doc.rust-lang.org/1.39.0/cargo/reference/manifest.html
+[crates.io 계정 페이지]: https://crates.io/me
+[퍼블리싱 가이드]: https://doc.rust-lang.org/1.39.0/cargo/reference/publishing.html
+[cargo 매니페스트 형식]: https://doc.rust-lang.org/1.39.0/cargo/reference/manifest.html
 
-### How to install a binary from crates.io
+### crates.io에서 바이너리를 설치하는 방법
 
-We've seen how to publish a crate to crates.io,
-and you might be wondering how to install it.
-In contrast to libraries,
-which cargo will download and compile for you
-when you run `cargo build` (or a similar command),
-you'll need to tell it to explicitly install binaries.
+앞서 crates.io에 크레이트를 공개하는 방법을 살펴봤는데,
+아마 어떻게 설치할 수 있는지도 궁금할 것입니다.
+`cargo build` (또는 이와 비슷한 명령)를 실행하면
+cargo가 알아서 라이브러리를 다운로드하고 컴파일해줬지만,
+바이너리를 설치할 때는 명시적으로
+어떤 바이너리를 설치할지 명시해야 합니다.
 
-This is done using
-`cargo install <crate-name>`.
-It will by default download the crate,
-compile all the binary targets it contains
-(in "release" mode, so it might take a while)
-and copy them into the `~/.cargo/bin/` directory.
-(Make sure that your shell knows to look there for binaries!)
+바이너리 설치는 `cargo install <크레이트-이름>`으로 할 수 있습니다.
+이 명령은 기본적으로 크레이트를 다운로드하고,
+크레이트에 포함된 모든 바이너리 타켓을 컴파일한 다음
+("릴리즈" 모드에서 시간이 조금 걸릴 수 있습니다.)
+그 결과물을 `~/.cargo/bin/` 디렉토리로 복사합니다.
+(쉘이 설치된 바이너리를 찾을 수 있는지 확인하세요!)
 
-It's also possible to
-install crates from git repositories,
-only install specific binaries of a crate,
-and specify an alternative directory to install them to.
-Have a look at `cargo install --help` for details.
+git 저장소를 통해 크레이트를
+설치할 수도 있습니다.
+또한 크레이트의 특정 바이너리만을 설치하거나,
+바이너리를 설치할 대체 디렉토리도 지정할 수 있습니다.
+자세한 정보는 `cargo install --help`를 참고하세요.
 
-### When to use it
+### 사용할 때
 
-`cargo install` is a simple way to install a binary crate.
-It's very convenient for Rust developers to use,
-but has some significant downsides:
-Since it will always compile your source from scratch,
-users of your tool will need to have
-Rust, cargo, and all other system dependencies your project requires
-to be installed on their machine.
-Compiling large Rust codebases can also take some time.
+`cargo install`은 바이너리 크레이트를 설치하는 쉬운 방법입니다.
+이는 러스트 개발자가 사용하기에 매우 편리한 방법이지만,
+심각한 단점도 있습니다:
+이렇게 크레이트를 설치하면 항상 소스를
+밑바닥부터 컴파일하게 되며,
+사용자는 자신의 기기에 바이너리를 설치하기 위해
+러스트와 cargo, 그리고 여러분의 프로젝트가 요구하는
+모든 시스템 디펜던시를 필요로 하게 됩니다.
+거대한 러스트 코드베이스를 컴파일하면 시간이 오래 걸릴 수도 있습니다.
 
-It's best to use this for distributing tools
-that are targeted at other Rust developers.
-For example:
-A lot of cargo subcommands
-like `cargo-tree` or `cargo-outdated`
-can be installed with it.
+다른 러스트 개발자를 대상으로 도구를 배포할 때는
+이렇게 하는 것이 가장 좋습니다.
+예를 들어:
+`cargo-tree` 또는 `cargo-outdated`와 같은
+많은 cargo 서브커맨드를 함께 설치할 수 있습니다.
 
-## Distributing binaries
+## 바이너리 배포하기
 
-Rust is a language that compiles to native code
-and by default statically links all dependencies.
-When you run `cargo build`
-on your project that contains a binary called `grrs`,
-you'll end up with a binary file called `grrs`.
-Try it out:
-Using `cargo build`, it'll be `target/debug/grrs`,
-and when you run `cargo build --release`, it'll be `target/release/grrs`.
-Unless you use crates
-that explicitly need external libraries to be installed on the target system
-(like using the system's version of OpenSSL),
-this binary will only depend on common system libraries.
-That means,
-you take that one file,
-send it to people running the same operating system as you,
-and they'll be able to run it.
+러스트는 네이티브 코드로 컴파일되고,
+기본적으로 모든 디펜던시를 정적으로 링크하는 언어입니다.
+`grrs`라는 바이너리를 가진 프로젝트에서
+`cargo build`를 실행하면,
+최종적으로 `grrs`라는 바이너리를 얻게 됩니다.
+시도해보세요:
+`cargo build`로 빌드하면 바이너리 파일이 `target/debug/grrs`에 만들어지고,
+`cargo build --release`로 빌드하면 `target/release/grrs`에 만들어집니다.
+대상 시스템에 특정 외부 라이브러리 설치를 필요로하는 크레이트
+(시스템 버전의 OpenSSL을 사용하는 등)를 사용하는 것이 아닌 이상,
+이렇게 만들어진 바이너리는 공통 시스템 라이브러리에만 의존합니다.
+즉, 파일 하나를 같은 운영 체제를 사용하는 다른 사람들에게 보내면
+파일을 받은 사람들이 바이너리를 실행할 수 있습니다.
 
-This is already very powerful!
-It works around two of the downsides we just saw for `cargo install`:
-There is no need to have Rust installed on the user's machine,
-and instead of it taking a minute to compile,
-they can instantly run the binary.
+이것만으로도 이미 강력합니다!
+방금 본 `cargo install`의 두 가지 단점을 뛰어넘을 수 있습니다:
+사용자의 기기에 러스트를 설치할 필요도 없고,
+컴파일하기 위해 오랜 시간을 기다릴 필요도 없습니다.
+사용자는 바로 바이너리를 실행할 수 있습니다.
 
-So, as we've seen,
-`cargo build` _already_ builds binaries for us.
-The only issue is,
-those are not guaranteed to work on all platforms.
-If you run `cargo build` on your Windows machine,
-you won't get a binary that works on a Mac by default.
-Is there a way to generate these binaries
-for all the interesting platforms
-automatically?
+앞서 봤듯이, `cargo build`는 우리를 위한 바이너리를 빌드합니다.
+유일한 문제는 그 바이너리를 모든 플랫폼에서 작동한다고 보장할 수 없다는 것입니다.
+여러분의 윈도우즈 머신에서 `cargo build`를 실행한다면
+기본적으로 맥에서 작동하는 바이너리를 없습니다.
+모든 플랫폼에서 작동하는 바이너리를 자동으로 생성할
+방법이 있을까요?
 
-### Building binary releases on CI
+### CI로 바이너리 릴리즈 빌드하기
 
-If your tool is open sourced
-and hosted on GitHub,
-it's quite easy to set up a free CI (continuous integration) service
-like [Travis CI].
-(There are other services that also work on other platforms, but Travis is very popular.)
-This basically runs setup commands
-in a virtual machine
-each time you push changes to your repository.
-What those commands are,
-and the types of machines they run on,
-is configurable.
-For example:
-A good idea is to run `cargo test`
-on a machine with Rust and some common build tools installed.
-If this fails,
-you know there are issues in the most recent changes.
+여러분의 도구가 오픈소스이고
+GitHub에서 호스트되고 있다면,
+매우 쉽게 [Travis CI]와 같은
+무료 CI(continuous integration) 서비스를 설정할 수 있습니다.
+(다른 플랫폼에서 작동하는 다른 서비스들도 있지만, Travis가 유명합니다.)
+CI는 기본적으로 저장소에 변경사항을 푸시할 때마다
+가상 머신에서 명령을 실행합니다.
+CI에서 어떤 명령을 사용할지,
+어떤 종류의 머신을 사용할지
+설정할 수 있습니다.
+예를 들어:
+러스트와 몇몇 일반적인 빌드 도구가 설치된 머신에서
+`cargo test`를 실행하는 것이 좋습니다.
+만약 테스트가 실패한다면,
+최신 변경사항에 문제가 있다는 사실을 알 수 있습니다.
 
 [Travis CI]: https://travis-ci.com/
 
-We can also use this
-to build binaries and upload them to GitHub!
-Indeed, if we run
-`cargo build --release`
-and upload the binary somewhere,
-we should be all set, right?
-Not quite.
-We still need to make sure the binaries we build
-are compatible with as many systems as possible.
-For example,
-on Linux we can compile not for the current system,
-but instead for the `x86_64-unknown-linux-musl` target,
-to not depend on default system libraries.
-On macOS, we can set `MACOSX_DEPLOYMENT_TARGET` to `10.7`
-to only depend on system features present in versions 10.7 and older.
+CI를 통해 바이너리를 빌드하고
+GitHub에 업로드할 수도 있습니다!
+실제로 `cargo build --release`를 실행하고
+어딘가에 바이너리를 업로드하면
+모든 준비가 끝납니다. 그렇죠?
+사실 그렇지 않습니다.
+우리가 빌드한 바이너리가
+최대한 많은 시스템과 호환되는지
+확인해야 합니다.
+예를 들어,
+리눅스에서는 현재 시스템이 아닌
+`x86_64-unknown-linux-musl`을 대상으로 컴파일을 하여
+기본 시스템 라이브러리에 의존하지 않도록 할 수 있습니다.
+macOS에서는 `MACOSX_DEPLOYMENT_TARGET`을 `10.7`로 설정하면
+10.7 버전 이상의 시스템에만 있는 기능에만 의존하도록 할 수 있습니다.
 
-You can see one example of building binaries using this approach
-[here][wasm-pack-travis] for Linux and macOS
-and [here][wasm-pack-appveyor] for Windows (using AppVeyor).
+이러한 바이너리 빌드 방법의 예시를 Linux, macOS를 대상으로 한
+[여기][wasm-pack-travis]과 윈도우즈를 대상으로 한
+[여기][wasm-pack-appveyor]에서 볼 수 있습니다.
 
 [wasm-pack-travis]: https://github.com/rustwasm/wasm-pack/blob/51e6351c28fbd40745719e6d4a7bf26dadd30c85/.travis.yml#L74-L91
 [wasm-pack-appveyor]: https://github.com/rustwasm/wasm-pack/blob/51e6351c28fbd40745719e6d4a7bf26dadd30c85/.appveyor.yml
 
-Another way is to use pre-built (Docker) images
-that contain all the tools we need
-to build binaries.
-This allows us to easily target more exotic platforms, too.
-The [trust] project contains
-scripts that you can include in your project
-as well as instructions on how to set this up.
-It also includes support for Windows using AppVeyor.
+또 다른 방법은 바이너리를 빌드할 때 필요한
+모든 도구를 갖추고 있는 pre-built (도커) 이미지를 사용하는 것입니다.
+이를 통해 보다 다양한 플랫폼을 쉽게 공략할 수 잇습니다.
+[trust] 프로젝트에는
+여러분의 프로젝트에 사용할 수 있는 스크립트와
+이를 설정하는 방법에 대한 설명이 있으며,
+AppVeyor를 통해 윈도우즈도 지원합니다.
 
-If you'd rather set this up locally
-and generate the release files on your own machine,
-still have a look at trust.
-It uses [cross] internally,
-which works similar to cargo
-but forwards commands to a cargo process inside a Docker container.
-The definitions of the images are also available in
-[cross' repository][cross].
+만약 로컬에서 모든 설정을 하고
+릴리즈 파일을 자신의 컴퓨터에 생성하고 싶은 경우에도
+trust를 확인해보세요.
+trust는 내부적으로 [cross]를 사용하는데,
+이는 cargo와 비슷하게 동작하지만
+도커 컨테이너 내부의 cargo 프로세스로 명령을
+전달합니다.
+여기에 사용하는 이미지 정의는
+[cross]에서도 사용할 수 있씁니다.
 
 [trust]: https://github.com/japaric/trust
 [cross]: https://github.com/rust-embedded/cross
 
-### How to install these binaries
+### 바이너리 설치하는 방법
 
-You point your users to your release page
-that might look something [like this one][wasm-pack-release],
-and they can download the artifacts we've just created.
-The release artifacts we've just generated are nothing special:
-At the end, they are just archive files that contain our binaries!
-This means that users of your tool
-can download them with their browser,
-extract them (often happens automatically),
-and copy the binaries to a place they like.
+사용자에게 [wasm-pack-release]와 같은 릴리즈 페이지를 제공하면
+사용자는 우리가 생성한 아티팩트를 다운로드할 수 있습니다.
+우리가 생성한 릴리즈 아티팩트는 특별한 것이 아닙니다:
+결국 바이너리를 포함한 아카이브 파일일 뿐입니다!
+즉, 여러분이 만든 도구의 사용자들은
+자신의 브라우저를 이용해 파일을 다운로드하고
+파일의 압축을 푼 다음(보통 자동으로 됩니다.),
+원하는 위치에 바이너리를 복사해 사용하게 됩니다.
 
 [wasm-pack-release]: https://github.com/rustwasm/wasm-pack/releases/tag/v0.5.1
 
-This does require some experience with manually "installing" programs,
-so you want to add a section to your README file
-on how to install this program.
+이러한 과정은 수동으로 프로그램을 "설치"하는 경험을 수반하기 때문에
+README 파일에 프로그램을 설치하는 방법에 대해
+설명하는 섹션을 추가할 필요가 있습니다.
 
 <aside class="note">
 
-**Note:**
-If you used [trust] to build your binaries and added them to GitHub releases,
-you can also tell people to run
-`curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --git your-name/repo-name`
-if you think that makes it easier.
+**참고:**
+만약 [trust]를 이용해 바이너리를 빌드하고, 이를 GitHub 릴리즈에 추가했다면 사람들에게
+`curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --git your-name/repo-name`를
+실행하라고 안내할 수도 있습니다.
 
 </aside>
 
-### When to use it
+### 사용할 때
 
-Having binary releases is a good idea in general,
-there's hardly any downside to it.
-It does not solve the problem of users having to manually
-install and update
-your tools,
-but they can quickly get the latest releases version
-without the need to install Rust.
+바이너리 릴리즈는 일반적으로 좋은 선택이며,
+단점이 거의 없습니다.
+사용자가 수동으로 도구를 설치하고
+업데이트해야 한다는 문제를 해결하지는 못하지만,
+러스트를 설치하지 않고 빠르게 최신 릴리즈 버전을
+설치할 수 있습니다.
 
-### What to package in addition to your binaries
+### 바이너리에 추가로 패키징할 것
 
-Right now,
-when a user downloads our release builds,
-they will get a `.tar.gz` file
-that only contains binary files.
-So, in our example project,
-they will just get a single `grrs` file they can run.
-But there are some more files we already have in our repository
-that they might want to have.
-The README file that tells them how to use this tool,
-and the license file(s),
-for example.
-Since we already have them,
-they are easy to add.
+이제 사용자가 릴리즈 빌드를 다운로드하면
+바이너리 파일만이 포함된 `.tar.gz` 파일을 얻게 됩니다.
+따라서 우리의 예시 프로젝트의 경우
+사용자는 하나의 실행 가능한 `grrs` 파일을 얻습니다.
+그런데 우리의 저장소에는 더 많은 파일이 있고,
+사용자가 추가적인 파일을 받길 원할 수도 있습니다.
+예를 들어 도구를 어떻게 사용해야 하는지 설명하는 README 파일이나
+라이센스 파일을 제공할 수 있습니다.
+프로젝트에 이미 파일이 있으므로,
+쉽게 추가할 수 있습니다.
 
-There are some more interesting files
-that make sense especially for command-line tools,
-though:
-How about we also ship a man page in addition to that README file,
-and config files that add completions of the possible flags to your shell?
-You can write these by hand,
-but _clap_, the argument parsing library we use
-(which clap builds upon)
-has a way to generate all these files for us.
-See [this in-depth chapter][clap-man-pages]
-for more details.
-
+특히 커맨드라인 도구에 적합한 몇몇 흥미로운
+파일들이 있습니다:
+README 파일 외에 man 페이지를 추가로 제공하거나,
+쉘에서 사용할 수 있는 플래그에 대한 자동완성 설정 파일을
+제공하는 건 어떨까요?
+이를 직접 손으로 작성할 수도 있겠지만,
+우리가 사용하는 인자 파싱 라이브러리 clap은
+파일을 자동으로 생성해 줍니다.
+더 자세한 내용은 이 책의 [깊이 있는 주제][clap-man-pages]에서
+찾아보세요.
 
 [clap-man-pages]: ../in-depth/docs.html
 
+## 패키지 저장소를 통해 애플리케이션 설치하기
 
-## Getting your app into package repositories
+앞서 살펴본 두 방법은 모두
+일반적으로 기기에 소프트웨어를 설치하는 방식은 아닙니다.
+특히 커맨드라인 툴은 대부분의 운영체제에서 글로벌 패키지
+매니저를 통해 설치합니다.
+이렇게 하면 사용자는 다른 프로그램을 설치하는 것과 같은 방식으로
+여러분의 프로그램을 설치할 수 있으므로,
+프로그램을 설치하는 방법에 대해 신경쓸 필요가 없습니다.
+이러한 패키지 매니저는 프로그램의 새 버전을 사용할 수 있게 됐을 때
+사용자가 프로그램을 업데이트할 수 있도록 해줍니다.
 
-Both approaches we've seen so far
-are not how you typically install software on your machine.
-Especially command-line tools
-you install using global package managers
-on most operating systems.
-The advantages for users are quite obvious:
-There is no need to think about how to install your program,
-if it can be installed the same way as they install the other tools.
-These package managers also allow users to update their programs
-when a new version is available.
-
-Sadly, supporting different systems means
-you'll have to look at how these different systems work.
-For some,
-it might be as easy as adding a file to your repository
-(e.g. adding a Formula file like [this][rg-formula] for macOS's `brew`),
-but for others you'll often need to send in patches yourself
-and add your tool to their repositories.
-There are helpful tools like
-[cargo-bundle](https://crates.io/crates/cargo-bundle),
-[cargo-deb](https://crates.io/crates/cargo-deb), and
-[cargo-aur](https://crates.io/crates/cargo-aur),
-but describing how they work
-and how to correctly package your tool
-for those different systems is beyond the scope of this chapter.
+슬프게도, 서로 다른 시스템을 지원한다는 것은
+각 시스템이 어떻게 동작하는지 살펴봐야 함을 의미합니다.
+어떤 경우에는 저장소에 파일을 추가하는 것만큼 쉬울 수도 있습니다.
+(가령, macOS의 `brew`를 사용하기 위해 [이것][rg-formula]과 같은 포뮬러(Formula) 파일을 추가할 수 있습니다.)
+하지만 그 외의 경우에는 대체로 직접 패치를 전송해 해당 패키지 매니저의 저장소에
+여러분의 프로그램을 추가해야 합니다.
+이때 [cargo-bundle](https://crates.io/crates/cargo-bundle),
+[cargo-deb](https://crates.io/crates/cargo-deb),
+[cargo-aur](https://crates.io/crates/cargo-aur)과 같은 유용한 도구를 사용할 수 있습니다.
+이 챕터에서는 다양한 시스템에서 이들이 어떻게 동작하는지,
+어떻게 여러분의 프로그램을 올바르게 패키징할 수 있는지
+설명하지는 않습니다.
 
 [rg-formula]: https://github.com/BurntSushi/ripgrep/blob/31adff6f3c4bfefc9e77df40871f2989443e6827/pkg/brew/ripgrep-bin.rb
 
-Instead,
-let's have a look at a tool that is written in Rust
-and that is available in many different package managers.
+대신 다양한 패키지 매니저에서 사용할 수 있는
+러스트 도구를 살펴보겠습니다.
 
-### An example: ripgrep
+### 예시: ripgrep
 
-[ripgrep] is an alternative to `grep`/`ack`/`ag` and is written in Rust.
-It's quite successful and is packaged for many operating systems:
-Just look at [the "Installation" section][rg-install] of its README!
+[ripgrep]은 러스트로 작성된 `grep`/`ack`/`ag` 대체품입니다.
+ripgrep은 매우 성공적인 프로젝트이며, 많은 운영체제에 대해 패키징되어 있습니다:
+프로젝트의 README에서 ["Installation" 섹션][rg-install]을 살펴보세요!
 
-Note that it lists a few different options how you can install it:
-It starts with a link to the GitHub releases
-which contain the binaries so you can download them directly;
-then it lists how to install it using a bunch of different package managers;
-finally, you can also install it using `cargo install`.
+설치 방법에는 몇 가지 선택지가 있습니다:
+먼저 GitHub 릴리즈 링크를 통해 바이너리를 직접 다운로드하는 방법이 있습니다.
+또는 다양한 패키지 매니저를 통해 설치하는 방법도 있습니다.
+마지막으로 `cargo install`을 통해 설치하는 방법이 있습니다.
 
-This seems like a very good idea:
-Don't pick and choose one of the approaches presented here,
-but start with `cargo install`,
-add binary releases,
-and finally start distributing your tool using system package managers.
+여기에 나열된 방법 중 하나를 따르지 않고
+`cargo install`로 바이너리 릴리즈를 추가하는 것으로 시작해
+최종적으로 여러분의 도구를 시스템 패키지 매니저를 통해
+배포해보는 것도 것도 좋은 생각인 것 같습니다.
 
 [ripgrep]: https://github.com/BurntSushi/ripgrep
 [rg-install]: https://github.com/BurntSushi/ripgrep/tree/31adff6f3c4bfefc9e77df40871f2989443e6827#installation
