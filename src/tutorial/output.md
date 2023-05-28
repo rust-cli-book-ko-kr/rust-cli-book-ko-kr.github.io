@@ -120,7 +120,7 @@ eprintln!("This is an error! :(");
 첫 번째는, 터미널을 실제로 "플러시(flush)"하는
 쓰기 횟수를 줄이는 방법입니다.
 `println!`은 보통 새로운 라인에 내용을 출력하기 위해
-시스템에게 _매번_ 터미널을 플러시해달라고 요청합니다.
+시스템에게 매번 터미널을 플러시해달라고 요청합니다.
 그럴 필요가 없다면, `stdout`을 [`BufWriter`]에서
 다루도록 래핑하면 됩니다. [`BufWriter`]는 기본적으로
 최대 8kB까지 버퍼링 할 수 있습니다.
@@ -130,9 +130,9 @@ eprintln!("This is an error! :(");
 ```rust
 use std::io::{self, Write};
 
-let stdout = io::stdout(); // get the global stdout entity
-let mut handle = io::BufWriter::new(stdout); // optional: wrap that handle in a buffer
-writeln!(handle, "foo: {}", 42); // add `?` if you care about errors here
+let stdout = io::stdout(); // 글로벌 stdout 엔티티를 얻는다
+let mut handle = io::BufWriter::new(stdout); // 선택사항: 버퍼로 다루도록 감싼다
+writeln!(handle, "foo: {}", 42); // 에러가 신경쓰인다면 여기에 `?`를 추가한다
 ```
 
 두 번째는,
@@ -143,9 +143,9 @@ writeln!(handle, "foo: {}", 42); // add `?` if you care about errors here
 ```rust
 use std::io::{self, Write};
 
-let stdout = io::stdout(); // get the global stdout entity
-let mut handle = stdout.lock(); // acquire a lock on it
-writeln!(handle, "foo: {}", 42); // add `?` if you care about errors here
+let stdout = io::stdout(); // 글로벌 stdout 엔티티를 얻는다
+let mut handle = stdout.lock(); // 락을 얻는다
+writeln!(handle, "foo: {}", 42);  // 에러가 신경쓰인다면 여기에 `?`를 추가한다
 ```
 
 두 방법을 함께 사용할 수도 있습니다.
@@ -187,11 +187,11 @@ writeln!(handle, "foo: {}", 42); // add `?` if you care about errors here
 로그는 반년 뒤에 프로그램을 다시 실행할 때 대단히 유용해집니다.
 한편, 로그를 남기는 것은 메시지의 중요도를 명시하는 것만 빼면
 `println!`을 사용하는 것과 같습니다.
-주로 사용하는 로그 레벨에는 _error_, _warn_, _info_, _debug_, _trace_가 있습니다. (_error_는 중요도가 가장 높고, _trace_는 가장 낮습니다.)
+주로 사용하는 로그 레벨에는 _error_, _warn_, _info_, _debug_, _trace_ 가 있습니다. (_error_ 는 중요도가 가장 높고, _trace_ 는 가장 낮습니다.)
 
 애플리케이션에 간단한 로그를 남기기 위해서는
 [log] 크레이트 (로그 레벨의 이름을 딴 매크로 포함)와 로그 출력을
-작성할 때 유용한 _어댑터_가 필요합니다.
+작성할 때 유용한 어댑터가 필요합니다.
 로그 어댑터는 매우 유연하게 상용할 수 있습니다.
 예를 들어, 어댑터를 이용해 터미널이 아닌 [syslog]에 로그를 남길 수도 있고,
 아니면 중앙 로그 서버에 로그를 남길 수도 있습니다.

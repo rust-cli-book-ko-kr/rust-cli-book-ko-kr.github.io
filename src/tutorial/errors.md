@@ -84,7 +84,7 @@ let content = match result {
 지금까지의 모든 예시에 실제로는 숨겨진 부분이 있었습니다.
 바로 이 코드가 속해 있는 함수 시그니처입니다.
 `return`이 있는 앞 예시에서 이것이 매우 중요해집니다.
-여기 _전체_ 예시가 있습니다:
+여기 전체 예시가 있습니다:
 
 ```rust,no_run
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -122,7 +122,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 맞아요, 물음표입니다.
 `Result` 타입의 값에 이 연산자를 붙일 수 있고,
 러스트는 내부적으로 이 연산자를 우리가 작성한
-`match`와 매우 비슷한 것으로 확장해줍니다.
+`match`와 매우 비슷한 것으로 확장해 줍니다.
 
 한번 해보세요:
 

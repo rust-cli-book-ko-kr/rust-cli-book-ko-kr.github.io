@@ -501,6 +501,6 @@ cargo는 바이너리들이 `src/bin/<name>.rs`에 있을 것이라고 예상합
 이 챕터에서 사용된 전체 코드는 [이 책의 저장소][src]에서
 찾아볼 수 있습니다.
 
-[src]: https://github.com/rust-cli/book/tree/master/src/tutorial/testing
+[src]: https://github.com/parksb/rust-cli-book-ko/tree/master/src/tutorial/testing
 
 </aside>

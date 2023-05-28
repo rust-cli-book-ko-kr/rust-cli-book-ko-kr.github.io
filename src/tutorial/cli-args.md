@@ -96,11 +96,11 @@ CLI 인자를 프로그램의 입력을 표현하는
 더 좋은 방법은 다양한 라이브러리 중 하나를 사용하는 것입니다.
 커맨드라인 인자를 파싱하는 데 가장 인기있는 라이브러리는
 [`clap`]입니다.
-[`clap`]은 서브 커맨드, [shell completions], 도움말 메시지 등,
+[`clap`]은 서브 커맨드, [쉘 자동완성], 도움말 메시지 등,
 여러분이 생각하는 모든 기능을 지원합니다.
 
 [`clap`]: https://docs.rs/clap/
-[shell completions]: https://docs.rs/clap_complete/
+[쉘 자동완성]: https://docs.rs/clap_complete/
 
 먼저 `Cargo.toml` 파일의 `[dependencies]` 섹션에
 `clap = { version = "4.0", features = ["derive"] }`을 추가해
@@ -108,7 +108,7 @@ CLI 인자를 프로그램의 입력을 표현하는
 
 이제 우리의 코드에 `use clap::Parser;`를 추가하고,
 `struct Cli` 바로 위에 `#[derive(Parser)]`를 작성합니다.
-그리고 문서화 주석도 작성해봅시다.
+그리고 문서화 주석도 작성해 봅시다.
 
 아래와 같이 하면 됩니다 (`src/main.rs` 파일의 `fn main() {` 앞 부분):
 
@@ -119,10 +119,10 @@ CLI 인자를 프로그램의 입력을 표현하는
 <aside class="node">
 
 **참고:**
-필드에 추가할 수 잇는 수많은 커스텀 어트리뷰트가 있습니다.
+필드에 추가할 수 있는 수많은 커스텀 어트리뷰트가 있습니다.
 예를 들어, 어떤 필드를 `-o` 또는 `--output` 뒤에 오는 인자를 위해 사용하고 싶다면
 `#[arg(short = 'o', long = "output")]`를 추가하면 됩니다.
-더 자세한 정보는 [clap documentation][`clap`]을 확인해보세요.
+더 자세한 정보는 [clap 문서][`clap`]를 확인해보세요.
 
 </aside>
 
@@ -162,7 +162,7 @@ Clap은 자동으로 `--help` 메시지를 생성해 줄 뿐만 아니라,
 {{#include cli-args-clap.rs}}
 ```
 
-아무 인자없이 실행하는 경우:
+아무 인자 없이 실행하는 경우:
 
 ```console
 $ cargo run
