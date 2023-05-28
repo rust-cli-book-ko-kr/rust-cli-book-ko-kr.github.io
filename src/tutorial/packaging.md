@@ -257,7 +257,7 @@ README 파일 외에 man 페이지를 추가로 제공하거나,
 이를 직접 손으로 작성할 수도 있겠지만,
 우리가 사용하는 인자 파싱 라이브러리 clap은
 파일을 자동으로 생성해 줍니다.
-더 자세한 내용은 이 책의 [깊이 있는 주제][clap-man-pages]에서
+더 자세한 내용은 이 책의 [더 깊은 주제][clap-man-pages]에서
 찾아보세요.
 
 [clap-man-pages]: ../in-depth/docs.html

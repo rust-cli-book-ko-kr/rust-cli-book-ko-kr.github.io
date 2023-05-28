@@ -1,4 +1,4 @@
-# In-depth topics
+# 더 깊은 주제
 
-A small collection of chapters covering some more details
-that you might care about when writing your command line application.
+커맨드라인 애플리케이션을 작성할 때 여러분이 신경 써야 하는 부분에 대해
+더욱 자세한 내용을 다루는 챕터입니다.
