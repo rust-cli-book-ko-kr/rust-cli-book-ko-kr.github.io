@@ -1,6 +1,6 @@
-use assert_cmd::prelude::*; // Add methods on commands
-use predicates::prelude::*; // Used for writing assertions
-use std::process::Command; // Run programs
+use assert_cmd::prelude::*; // 명령에 메서드 추가
+use predicates::prelude::*; // 어서션 작성에 사용
+use std::process::Command; // 프로그램을 실행
 
 #[test]
 fn file_doesnt_exist() -> Result<(), Box<dyn std::error::Error>> {
