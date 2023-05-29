@@ -16,9 +16,9 @@
 
 CLI 애플리케이션에 바로 뛰어들기 전에 마지막으로 짚고 넘어갈 것이 있습니다.
 만약 이 책에서 오류를 찾거나, 더 많은 내용을 담을 수 있도록 돕고 싶다면,
-[CLI 책 저장소][book-src-ko] ([원본 저장소][book-src])에서 소스를 확인하실 수 있습니다.
+[CLI 책 저장소][book-src-ko-kr] ([원본 저장소][book-src])에서 소스를 확인하실 수 있습니다.
 여러분의 피드백을 환영합니다.
 감사합니다!
 
-[book-src-ko]: https://github.com/parksb/rust-cli-book-ko
+[book-src-ko-kr]: https://github.com/parksb/rust-cli-book-ko
 [book-src]: https://github.com/rust-cli/book
