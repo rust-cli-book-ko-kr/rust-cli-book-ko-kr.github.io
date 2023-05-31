@@ -1,11 +1,11 @@
 use clap::Parser;
 use std::path::PathBuf;
 
-/// Count the number of lines in a file
+/// 파일의 라인수를 센다
 #[derive(Parser)]
 #[command(arg_required_else_help = true)]
 struct Cli {
-    /// The path to the file to read
+    /// 읽을 파일의 경로
     file: PathBuf,
 }
 

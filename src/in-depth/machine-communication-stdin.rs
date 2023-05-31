@@ -6,11 +6,11 @@ use std::{
     path::PathBuf,
 };
 
-/// Count the number of lines in a file or stdin
+/// 파일 또는 stdin의 라인 수를 센다
 #[derive(Parser)]
 #[command(arg_required_else_help = true)]
 struct Cli {
-    /// The path to the file to read, use - to read from stdin (must not be a tty)
+    /// 읽을 파일의 경로, - 를 사용하면 stdin에서 읽음 (tty는 안 됨)
     file: PathBuf,
 }
 

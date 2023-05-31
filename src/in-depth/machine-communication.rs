@@ -1,10 +1,10 @@
 use clap::Parser;
 use serde_json::json;
 
-/// Search for a pattern in a file and display the lines that contain it.
+/// 파일에서 패턴을 찾고 해당하는 라인을 보여준다.
 #[derive(Parser)]
 struct Cli {
-    /// Output JSON instead of human readable messages
+    /// 사람이 읽을 수 있는 메시지 대신 JSON 출력
     #[arg(long = "json")]
     json: bool,
 }

@@ -6,7 +6,7 @@ fn main() {
     })
     .expect("Error setting Ctrl-C handler");
 
-    // Following code does the actual work, and can be interrupted by pressing
-    // Ctrl-C. As an example: Let's wait a few seconds.
+    // 다음 코드는 실제로 동작하며, Ctrl-C로 인터럽트될 수 있다.
+    // 이 예시에서는 몇 초간 기다린다.
     thread::sleep(Duration::from_secs(2));
 }
