@@ -1,34 +1,30 @@
-# Rendering documentation for your CLI apps
+# CLI 앱을 위한 문서 렌더링하기
 
-Documentation for CLIs usually consists of
-a `--help` section in the command
-and a manual (`man`) page.
+CLI를 위한 문서는 보통
+명령의 `--help` 섹션이나
+매뉴얼(`man`) 페이지로 구성됩니다.
 
-Both can be automatically generated
-when using [`clap`](https://crates.io/crates/clap), via
-[`clap_mangen`](https://crates.io/crates/clap_mangen) crate.
+[`clap`](https://crates.io/crates/clap)을 사용하면
+[`clap_mangen`](https://crates.io/crates/clap_mangen) 크레이트를 통해
+둘 다 자동으로 생성할 수 있습니다.
 
 ```rust,ignore
 #[derive(Parser)]
 pub struct Head {
-    /// file to load
+    /// 로드할 파일
     pub file: PathBuf,
-    /// how many lines to print
+    /// 출력할 라인 개수
     #[arg(short = "n", default_value = "5")]
     pub count: usize,
 }
 ```
 
-Secondly, you need to use a `build.rs`
-to generate the manual file at compile time
-from the definition of your app
-in code.
+두 번째로, 컴파일 타임에 코드에 있는
+앱의 정의로부터 매뉴얼 파일을 생성하려면 `
+`build.rs`를 사용해야 합니다.
 
-There are a few things to keep in mind
-(such as how you want to package your binary)
-but for now
-we simply put the `man` file
-next to our `src` folder.
+바이너리 패키징 방식 등 고려해야 할 사항이 있지만,
+지금은 `src` 폴더 옆에 `man` 을 두도록 하겠습니다.
 
 ```rust,ignore
 use clap::CommandFactory;
@@ -50,9 +46,7 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-When you now compile your application
-there will be a `head.1` file
-in your project directory.
+이제 애플리케이션을 컴파일하면 프로젝트 디렉토리에
+`head.1` 파일이 만들어집니다.
 
-If you open that in `man`
-you'll be able to admire your free documentation.
+`man`에서 해당 파일을 열면 공짜 문서에 감탄할 것입니다.
