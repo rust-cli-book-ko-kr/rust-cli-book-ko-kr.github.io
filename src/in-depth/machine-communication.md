@@ -1,9 +1,5 @@
 # 기계와 소통하기
 
-The power of command-line tools really comes to shine
-when you are able to combine them.
-This is not a new idea:
-In fact, this is a sentence from the [Unix philosophy]:
 커맨드라인 도구의 진정한 힘은 여러 도구를
 결합할 때 드러납니다.
 이는 새로운 사실이 아닙니다.
@@ -24,7 +20,7 @@ In fact, this is a sentence from the [Unix philosophy]:
 
 **참고:**
 먼저 [CLI 출력 챕터][output]을 읽어보세요.
-[CLI 출력 챕터]에서는 터미널에 출력을 내는 방법에 대해 설명합니다.
+[CLI 출력 챕터][output]에서는 터미널에 출력을 내는 방법에 대해 설명합니다.
 
 [output]: ../tutorial/output.html
 
