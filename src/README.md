@@ -20,5 +20,5 @@ CLI 애플리케이션에 바로 뛰어들기 전에 마지막으로 짚고 넘�
 여러분의 피드백을 환영합니다.
 감사합니다!
 
-[book-src-ko-kr]: https://github.com/parksb/rust-cli-book-ko
+[book-src-ko-kr]: https://github.com/parksb/rust-cli-book-ko-kr
 [book-src]: https://github.com/rust-cli/book
