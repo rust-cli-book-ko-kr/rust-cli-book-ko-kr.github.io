@@ -1,35 +1,35 @@
-# Resources
+# 자료
 
-Collaboration / help
+협업 / 도움
 - [cli-and-tui Discord Channel](https://discord.com/channels/273534239310479360/943315667430563862)
 
-## Crates referenced in this book
+## 이 책에서 참조한 크레이트
 
-- [anyhow](https://crates.io/crates/anyhow) - provides `anyhow::Error` for easy error handling
-- [assert_cmd](https://crates.io/crates/assert_cmd) - simplifies integration testing of CLIs
-- [assert_fs](https://crates.io/crates/assert_fs) - Setup input files and test output files
-- [clap-verbosity-flag](https://crates.io/crates/clap-verbosity-flag) - adds a `--verbose` flag to clap CLIs
-- [clap](https://crates.io/crates/clap) - command line argument parser
-- [confy](https://crates.io/crates/confy) - boilerplate-free configuration management
-- [crossbeam-channel](https://crates.io/crates/crossbeam-channel) - provides multi-producer multi-consumer channels for message passing
-- [ctrlc](https://crates.io/crates/ctrlc) - easy ctrl-c handler
-- [env_logger](https://crates.io/crates/env_logger) - implements a logger configurable via environment variables
-- [exitcode](https://crates.io/crates/exitcode) - system exit code constants
-- [human-panic](https://crates.io/crates/human-panic) - panic message handler
-- [indicatif](https://crates.io/crates/indicatif) - progress bars and spinners
-- [is-terminal](https://crates.io/crates/is-terminal) - detected whether application is running in a tty
-- [log](https://crates.io/crates/log) - provides logging abstracted over implementation
-- [predicates](https://crates.io/crates/predicates) - implements boolean-valued predicate functions
-- [proptest](https://crates.io/crates/proptest) - property testing framework
-- [serde_json](https://crates.io/crates/serde_json) - serialize/deserialize to JSON
-- [signal-hook](https://crates.io/crates/signal-hook) - handles UNIX signals
-- [tokio](https://crates.io/crates/tokio) - asynchronous runtime
-- [wasm-pack](https://crates.io/crates/wasm-pack) - tool for building WebAssembly
+- [anyhow](https://crates.io/crates/anyhow) - 쉬운 에러 처리를 위한 `anyhow::Error` 제공
+- [assert_cmd](https://crates.io/crates/assert_cmd) - CLI 통합 테스트 간소화
+- [assert_fs](https://crates.io/crates/assert_fs) - 입력 파일 설정 및 출력 파일 테스트
+- [clap-verbosity-flag](https://crates.io/crates/clap-verbosity-flag) - clap CLI에 `--verbose` 플래그 추가
+- [clap](https://crates.io/crates/clap) - 커맨드라인 인자 파서
+- [confy](https://crates.io/crates/confy) - 보일러플레이트 없는 설정 관리
+- [crossbeam-channel](https://crates.io/crates/crossbeam-channel) - 메시지 패싱을 위한 다중 생산자, 다중 소비자 채널 제공
+- [ctrlc](https://crates.io/crates/ctrlc) - 쉬운 ctrl-c 핸들러
+- [env_logger](https://crates.io/crates/env_logger) - 환경 변수를 통해 설정 가능한 로거 구현
+- [exitcode](https://crates.io/crates/exitcode) - 시스템 종료 코드 상수
+- [human-panic](https://crates.io/crates/human-panic) - 패닉 메시지 핸들러
+- [indicatif](https://crates.io/crates/indicatif) - 프로그래스 바와 스피너
+- [is-terminal](https://crates.io/crates/is-terminal) - 애플리케이션이 tty에서 실행 중인지 감지
+- [log](https://crates.io/crates/log) - 구현에 대한 로그 추상화 제공
+- [predicates](https://crates.io/crates/predicates) - 불리언 값으로 평가되는 예측 함수 구현
+- [proptest](https://crates.io/crates/proptest) - 속성 기반 테스트 프레임워크
+- [serde_json](https://crates.io/crates/serde_json) - JSON 직렬화/역직렬화
+- [signal-hook](https://crates.io/crates/signal-hook) - UNIX 시그널 처리
+- [tokio](https://crates.io/crates/tokio) - 비동기 런타임
+- [wasm-pack](https://crates.io/crates/wasm-pack) - WebAssembly 빌드를 위한 도구
 
-## Other crates
+## 다른 크레이트
 
-Due to the constantly-changing landscape of Rust crates, a good place to find
-crates is the [lib.rs](https://lib.rs) crate index, including:
+러스트 크레이트는 수시로 변화하기 때문에, 크레이트를 찾는 좋은 장소로는
+[lib.rs](https://lib.rs) 크레이트 인덱스가 있습니다. 여기에는 아래와 같은 내용이 있습니다:
 - [Command-line interface](https://lib.rs/command-line-interface)
 - [Configuration](https://lib.rs/config)
 - [Database interfaces](https://lib.rs/database)
@@ -38,6 +38,6 @@ crates is the [lib.rs](https://lib.rs) crate index, including:
 - [HTTP Client](https://lib.rs/web-programming/http-client)
 - [Operating systems](https://lib.rs/os)
 
-Other resources:
+다른 자료:
 - [Rust Cookbook](https://rust-lang-nursery.github.io/rust-cookbook/)
 - [rosetta-rs](https://github.com/rosetta-rs)
