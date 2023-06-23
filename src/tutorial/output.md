@@ -100,7 +100,7 @@ eprintln!("This is an error! :(");
 **주의**:
 [이스케이프 코드]를 출력하는 것은 위험할 수 있으며,
 사용자의 터미널을 이상한 상태에 빠지게 만들 수 있습니다.
-직접 [이스케이프 코드]를 출력할 때는 항상 조심하세요!
+직접 이스케이프 코드를 출력할 때는 항상 조심하세요!
 
 [이스케이프 코드]: https://ko.wikipedia.org/wiki/ANSI_%EC%9D%B4%EC%8A%A4%EC%BC%80%EC%9D%B4%ED%94%84_%EC%BD%94%EB%93%9C
 
@@ -226,7 +226,7 @@ $ env RUST_LOG=info cargo run --bin output-log
 [2018-11-30T20:25:52Z WARN  output_log] oops, nothing implemented!
 ```
 
-윈도우즈 파워쉘에서는 아래와 같이 실행할 수 있습니다:
+윈도우즈 파워셸에서는 아래와 같이 실행할 수 있습니다:
 ```console
 $ $env:RUST_LOG="info"
 $ cargo run --bin output-log
@@ -260,7 +260,7 @@ $ cargo run --bin output-log
 <aside>
 
 **팁:**
-경험적으로, 가볍게 쓸만한 CLI 프로그램도 향후 수년간 사용되곤 합니다.
+경험적으로, 가볍게 쓸만한 수준의 CLI 프로그램도 향후 수년간 사용되곤 합니다.
 (특히 임시 방편으로 프로그램을 만든 경우.)
 만약 애플리케이션이 동작하지 않아서 다른 사용자(가령 미래의 여러분)가 그 원인을 찾아야 할 때,
 `--verbose`를 전달해 추가적인 로그 출력을 확인할 수 있다면 디버깅에 수 분내지는 수 시간을 절약할 수 있습니다.
