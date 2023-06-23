@@ -1,0 +1,409 @@
+<!DOCTYPE HTML>
+<html lang="ko" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>사람과 기계를 위한 출력 - Command Line Applications in Rust</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/special-content.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">시작하기</a></li><li class="chapter-item expanded "><a href="../tutorial/index.html"><strong aria-hidden="true">1.</strong> 15분 안에 커맨드라인 앱 작성하기</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/setup.html"><strong aria-hidden="true">1.1.</strong> 프로젝트 준비</a></li><li class="chapter-item expanded "><a href="../tutorial/cli-args.html"><strong aria-hidden="true">1.2.</strong> 커맨드라인 인자 파싱하기</a></li><li class="chapter-item expanded "><a href="../tutorial/impl-draft.html"><strong aria-hidden="true">1.3.</strong> 첫 구현</a></li><li class="chapter-item expanded "><a href="../tutorial/errors.html"><strong aria-hidden="true">1.4.</strong> 더 나은 에러 보고</a></li><li class="chapter-item expanded "><a href="../tutorial/output.html" class="active"><strong aria-hidden="true">1.5.</strong> 사람과 기계를 위한 출력</a></li><li class="chapter-item expanded "><a href="../tutorial/testing.html"><strong aria-hidden="true">1.6.</strong> 테스트</a></li><li class="chapter-item expanded "><a href="../tutorial/packaging.html"><strong aria-hidden="true">1.7.</strong> 러스트 도구 패키징, 배포하기</a></li></ol></li><li class="chapter-item expanded "><a href="../in-depth/index.html"><strong aria-hidden="true">2.</strong> 더 깊은 주제</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../in-depth/signals.html"><strong aria-hidden="true">2.1.</strong> 시그널 다루기</a></li><li class="chapter-item expanded "><a href="../in-depth/config-files.html"><strong aria-hidden="true">2.2.</strong> 설정 파일 사용하기</a></li><li class="chapter-item expanded "><a href="../in-depth/exit-code.html"><strong aria-hidden="true">2.3.</strong> 종료 코드</a></li><li class="chapter-item expanded "><a href="../in-depth/human-communication.html"><strong aria-hidden="true">2.4.</strong> 사람과 소통하기</a></li><li class="chapter-item expanded "><a href="../in-depth/machine-communication.html"><strong aria-hidden="true">2.5.</strong> 기계와 소통하기</a></li><li class="chapter-item expanded "><a href="../in-depth/docs.html"><strong aria-hidden="true">2.6.</strong> CLI 앱을 위한 문서 렌더링하기</a></li></ol></li><li class="chapter-item expanded "><a href="../resources/index.html"><strong aria-hidden="true">3.</strong> 자료</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Command Line Applications in Rust</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parksb/rust-cli-book-ko-kr" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="출력"><a class="header" href="#출력">출력</a></h1>
+<h2 id="hello-world-출력하기"><a class="header" href="#hello-world-출력하기">“Hello World” 출력하기</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>println!(&quot;Hello World&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>쉽습니다. 좋아요, 다음 주제로 넘어가죠.</p>
+<h2 id="println-사용하기"><a class="header" href="#println-사용하기"><code>println!</code> 사용하기</a></h2>
+<p>여러분이 출력하고 싶은 모든 것을 <code>println!</code> 매크로를
+통해 출력할 수 있습니다.
+이 매크로는 놀라운 기능을 갖추고 있으며,
+특수한 문법도 있습니다.
+<code>println!</code> 매크로에는 첫 파라미터로 문자열 리터럴을 전달해야 합니다.
+이 파라미터는 추가 인자의 값으로 채워질
+플레이스홀더(placeholder)를 포함해야 합니다.</p>
+<p>예를 들어:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 42;
+println!(&quot;My lucky number is {}.&quot;, x);
+<span class="boring">}</span></code></pre></pre>
+<p>위 코드는 아래와 같은 출력을 냅니다:</p>
+<pre><code class="language-console">My lucky number is 42.
+</code></pre>
+<p>위 코드에서 문자열에 있는 중괄호(<code>{}</code>)는 플레이스홀더 중 하나로,
+주어진 값을 사람이 읽을 수 있는 형태로 출력하는 기본 플레이스홀더입니다.
+숫자와 문자열에 대해 아주 잘 동작하지만, 모든 타입에 대해 동작하지는 않습니다.
+이는 “디버그 표현“이 있는 이유이기도 한데, <code>{:?}</code>처럼 플레이스홀더의 괄호를
+채워서 사용할 수 있습니다.</p>
+<p>예를 들어:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let xs = vec![1, 2, 3];
+println!(&quot;The list is: {:?}&quot;, xs);
+<span class="boring">}</span></code></pre></pre>
+<p>위 코드는 아래와 같은 출력을 냅니다:</p>
+<pre><code class="language-console">The list is: [1, 2, 3]
+</code></pre>
+<p>만약 자기만의 데이터 타입을 디버깅과 로깅을 위해 출력 가능하게 만들고 싶다면,
+대부분의 경우 타입 정의 위에 <code>#[derive(Debug)]</code>를 추가하면 됩니다.</p>
+<aside>
+<p><strong>참고:</strong>
+“사용자 친화적“인 출력을 위해서는 <a href="https://doc.rust-lang.org/1.39.0/std/fmt/trait.Display.html"><code>Display</code></a> 트레잇을 사용하면 되고,
+디버그 출력(사람이 읽을 수 있지만 개발자를 위한 출력)을 위해서는 <a href="https://doc.rust-lang.org/1.39.0/std/fmt/trait.Debug.html"><code>Debug</code></a> 트레잇을 사용하면 됩니다.
+<code>println!</code>에서 사용할 수 있는 문법에 대해 더 자세히 알아보고 싶다면
+<a href="https://doc.rust-lang.org/1.39.0/std/fmt/index.html"><code>std::fmt</code> 모듈에 대한 문서</a>를 읽어보세요.</p>
+</aside>
+<h2 id="에러-출력하기"><a class="header" href="#에러-출력하기">에러 출력하기</a></h2>
+<p>에러는 <code>stderr</code>를 통해 출력해야 합니다.
+그래야 사용자나 다른 프로그램이 파이프를 통해
+프로그램의 출력을 파일이나 다른 프로그램에 전달하기
+쉬워집니다.</p>
+<aside>
+<p><strong>참고:</strong>
+대부분의 운영체제에서,
+프로그램은 <code>stdout</code>과 <code>stderr</code> 두 개의 출력 스트림을 가지고 있습니다.
+<code>stdout</code>은 프로그램의 실제 출력의 위해 사용하는 반면,
+<code>stderr</code>은 <code>stdout</code>으로부터 분리된 별도의 에러나 메시지를 위해 사용합니다.
+이를 통해 사용자에게 에러를 보여주는 동시에 출력은 파일에 저장되도록 할 수 있고,
+또는 출력이 다른 프로그램에 파이프되도록 할 수도 있습니다.</p>
+</aside>
+<p>러스트에서는 이를 <code>println!</code>과 <code>eprintln!</code>으로 구현할 수 있으며,
+전자는 <code>stdout</code>으로 출력하고,
+후자는 <code>stderr</code>로 출력합니다.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>println!(&quot;This is information&quot;);
+eprintln!(&quot;This is an error! :(&quot;);
+<span class="boring">}</span></code></pre></pre>
+<aside>
+<p><strong>주의</strong>:
+<a href="https://ko.wikipedia.org/wiki/ANSI_%EC%9D%B4%EC%8A%A4%EC%BC%80%EC%9D%B4%ED%94%84_%EC%BD%94%EB%93%9C">이스케이프 코드</a>를 출력하는 것은 위험할 수 있으며,
+사용자의 터미널을 이상한 상태에 빠지게 만들 수 있습니다.
+직접 이스케이프 코드를 출력할 때는 항상 조심하세요!</p>
+<p>여러분(그리고 여러분의 사용자들)의 더 나은 삶을 위해,
+이스케이프 코드를 다룰 때는 <code>ansi_term</code>과 같은 크레이트를
+사용하는 것이 가장 좋습니다.</p>
+</aside>
+<h2 id="출력-성능에-대한-참고사항"><a class="header" href="#출력-성능에-대한-참고사항">출력 성능에 대한 참고사항</a></h2>
+<p>터미널에 뭔가를 출력하는 것은 끔찍하게 느립니다!
+만약 루프에서 <code>println!</code>을 사용한다면,
+빠른 프로그램에서도 쉽게 보틀넥이 될 것입니다.
+성능을 높이기 위한 두 가지 대응 방법이 있습니다.</p>
+<p>첫 번째는, 터미널을 실제로 “플러시(flush)“하는
+쓰기 횟수를 줄이는 방법입니다.
+<code>println!</code>은 보통 새로운 라인에 내용을 출력하기 위해
+시스템에게 매번 터미널을 플러시해달라고 요청합니다.
+그럴 필요가 없다면, <code>stdout</code>을 <a href="https://doc.rust-lang.org/1.39.0/std/io/struct.BufWriter.html"><code>BufWriter</code></a>에서
+다루도록 래핑하면 됩니다. <a href="https://doc.rust-lang.org/1.39.0/std/io/struct.BufWriter.html"><code>BufWriter</code></a>는 기본적으로
+최대 8kB까지 버퍼링 할 수 있습니다.
+(즉시 출력을 하고 싶을 때는 <code>BufWriter</code>의
+<code>.flush()</code>를 호출하면 됩니다.)</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::io::{self, Write};
+
+let stdout = io::stdout(); // 글로벌 stdout 엔티티를 얻는다
+let mut handle = io::BufWriter::new(stdout); // 선택사항: 버퍼로 다루도록 감싼다
+writeln!(handle, &quot;foo: {}&quot;, 42); // 에러가 신경쓰인다면 여기에 `?`를 추가한다
+<span class="boring">}</span></code></pre></pre>
+<p>두 번째는,
+<code>stdout</code> (또는 <code>stderr</code>)에 대한 락(lock)을 획득하고
+<code>writeln!</code>을 이용해 직접 출력하는 방법입니다.
+이렇게 하면 시스템이 <code>stdout</code>을 매번 다시 잠그고 해제하는 것을 방지할 수 있습니다.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::io::{self, Write};
+
+let stdout = io::stdout(); // 글로벌 stdout 엔티티를 얻는다
+let mut handle = stdout.lock(); // 락을 얻는다
+writeln!(handle, &quot;foo: {}&quot;, 42);  // 에러가 신경쓰인다면 여기에 `?`를 추가한다
+<span class="boring">}</span></code></pre></pre>
+<p>두 방법을 함께 사용할 수도 있습니다.</p>
+<h2 id="프로그래스-바-보여주기"><a class="header" href="#프로그래스-바-보여주기">프로그래스 바 보여주기</a></h2>
+<p>어떤 CLI 애플리케이션은 1초 이내에 실행되기도 하지만,
+어떤 애플리케이션은 수 분, 수 시간을 소요하기도 합니다.
+시간이 오래 걸리는 프로그램을 작성한다면,
+사용자에게 프로그램이 동작하고 있다는 것을 보여주고 싶을 수 있습니다.
+이를 위해서는 상태가 업데이트되고 있다는 정보를 사용하기
+쉬운 형태로 출력해줘야 합니다.</p>
+<p><a href="https://crates.io/crates/indicatif">indicatif</a> 크레이트를 사용하면
+프로그램에 프로그래스 바와
+작은 스피너를 추가할 수 있습니다.
+여기 간단한 예시가 있습니다:</p>
+<pre><code class="language-rust ignore">fn main() {
+    let pb = indicatif::ProgressBar::new(100);
+    for i in 0..100 {
+        do_hard_work();
+        pb.println(format!(&quot;[+] finished #{}&quot;, i));
+        pb.inc(1);
+    }
+    pb.finish_with_message(&quot;done&quot;);
+}</code></pre>
+<p>더 자세한 정보는
+<a href="https://docs.rs/indicatif">문서</a>와 <a href="https://github.com/console-rs/indicatif/tree/main/examples">예시</a>를
+참고하세요.</p>
+<h2 id="로그"><a class="header" href="#로그">로그</a></h2>
+<p>프로그램에서 무슨 일이 일어나는지 보다 쉽게 이해하기 위해
+로그 구문을 추가하고 싶을 수 있습니다.
+보통 애플리케이션을 작성할 때 쉽게 로그를 남길 수 있습니다.
+로그는 반년 뒤에 프로그램을 다시 실행할 때 대단히 유용해집니다.
+한편, 로그를 남기는 것은 메시지의 중요도를 명시하는 것만 빼면
+<code>println!</code>을 사용하는 것과 같습니다.
+주로 사용하는 로그 레벨에는 <em>error</em>, <em>warn</em>, <em>info</em>, <em>debug</em>, <em>trace</em> 가 있습니다. (<em>error</em> 는 중요도가 가장 높고, <em>trace</em> 는 가장 낮습니다.)</p>
+<p>애플리케이션에 간단한 로그를 남기기 위해서는
+<a href="https://crates.io/crates/log">log</a> 크레이트 (로그 레벨의 이름을 딴 매크로 포함)와 로그 출력을
+작성할 때 유용한 어댑터가 필요합니다.
+로그 어댑터는 매우 유연하게 상용할 수 있습니다.
+예를 들어, 어댑터를 이용해 터미널이 아닌 <a href="https://ko.wikipedia.org/wiki/%EC%8B%9C%EC%8A%A4%EB%A1%9C%EA%B7%B8">syslog</a>에 로그를 남길 수도 있고,
+아니면 중앙 로그 서버에 로그를 남길 수도 있습니다.</p>
+<p>우리는 CLI 애플리케이션을 작성하는 데만 집중하고 있으므로,
+당장 사용하기 쉬운 어댑터는 <a href="https://crates.io/crates/env_logger">env_logger</a>입니다.
+<a href="https://crates.io/crates/env_logger">env_logger</a>를 사용하면 애플리케이션의 어느 부분에 어떤 레벨의
+로그를 남길지 환경 변수를 통해 명시할 수 있기 때문에 이를 “env” 로거라고 합니다.
+<a href="https://crates.io/crates/env_logger">env_logger</a>는 로그 메시지 앞에 타임스탬프와
+로그를 남긴 모듈의 이름을 붙입니다.
+라이브러리도 <code>log</code>를 사용할 수 있기 때문에
+로그 출력을 쉽게 구성할 수 있습니다.</p>
+<p>여기 간단한 예시가 있습니다:</p>
+<pre><code class="language-rust ignore">use log::{info, warn};
+
+fn main() {
+    env_logger::init();
+    info!(&quot;starting up&quot;);
+    warn!(&quot;oops, nothing implemented!&quot;);
+}</code></pre>
+<p>리눅스나 macOS에서 위 코드를 <code>src/bin/output-log.rs</code> 파일로 작성했다면,
+아래와 같이 실행할 수 있습니다:</p>
+<pre><code class="language-console">$ env RUST_LOG=info cargo run --bin output-log
+    Finished dev [unoptimized + debuginfo] target(s) in 0.17s
+     Running `target/debug/output-log`
+[2018-11-30T20:25:52Z INFO  output_log] starting up
+[2018-11-30T20:25:52Z WARN  output_log] oops, nothing implemented!
+</code></pre>
+<p>윈도우즈 파워셸에서는 아래와 같이 실행할 수 있습니다:</p>
+<pre><code class="language-console">$ $env:RUST_LOG=&quot;info&quot;
+$ cargo run --bin output-log
+    Finished dev [unoptimized + debuginfo] target(s) in 0.17s
+     Running `target/debug/output-log.exe`
+[2018-11-30T20:25:52Z INFO  output_log] starting up
+[2018-11-30T20:25:52Z WARN  output_log] oops, nothing implemented!
+</code></pre>
+<p>윈도우즈 CMD에서는 아래와 같이 실행합니다:</p>
+<pre><code class="language-console">$ set RUST_LOG=info
+$ cargo run --bin output-log
+    Finished dev [unoptimized + debuginfo] target(s) in 0.17s
+     Running `target/debug/output-log.exe`
+[2018-11-30T20:25:52Z INFO  output_log] starting up
+[2018-11-30T20:25:52Z WARN  output_log] oops, nothing implemented!
+</code></pre>
+<p><code>RUST_LOG</code>는 로그 설정에
+사용하는 환경 변수의 이름입니다.
+<code>env_logger</code>에는 빌더가 있기 때문에
+프로그래밍적으로 로그를 설정할 수도 있으며,
+가령 기본적으로 <em>info</em> 레벨 메시지가 출력됩니다.</p>
+<p>이외에도 많은 로그 어댑터가 있으며,
+<code>log</code>를 대체하거나 확장할 수 있는 어댑터들이 있습니다.
+만약 애플리케이션에 많은 양의 로그가 필요할 것 같다면
+다른 것들을 검토해보고 사용자의 삶의 질을 높여주세요.</p>
+<aside>
+<p><strong>팁:</strong>
+경험적으로, 가볍게 쓸만한 수준의 CLI 프로그램도 향후 수년간 사용되곤 합니다.
+(특히 임시 방편으로 프로그램을 만든 경우.)
+만약 애플리케이션이 동작하지 않아서 다른 사용자(가령 미래의 여러분)가 그 원인을 찾아야 할 때,
+<code>--verbose</code>를 전달해 추가적인 로그 출력을 확인할 수 있다면 디버깅에 수 분내지는 수 시간을 절약할 수 있습니다.
+<a href="https://crates.io/crates/clap-verbosity-flag">clap-verbosity-flag</a> 크레이트는 <code>clap</code>을 사용해 프로젝트에 쉽게 <code>--verbose</code>를 추가할 수 있도록 해줍니다.</p>
+</aside>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../tutorial/errors.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../tutorial/testing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../tutorial/errors.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../tutorial/testing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

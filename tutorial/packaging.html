@@ -1,0 +1,445 @@
+<!DOCTYPE HTML>
+<html lang="ko" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>러스트 도구 패키징, 배포하기 - Command Line Applications in Rust</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/special-content.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">시작하기</a></li><li class="chapter-item expanded "><a href="../tutorial/index.html"><strong aria-hidden="true">1.</strong> 15분 안에 커맨드라인 앱 작성하기</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/setup.html"><strong aria-hidden="true">1.1.</strong> 프로젝트 준비</a></li><li class="chapter-item expanded "><a href="../tutorial/cli-args.html"><strong aria-hidden="true">1.2.</strong> 커맨드라인 인자 파싱하기</a></li><li class="chapter-item expanded "><a href="../tutorial/impl-draft.html"><strong aria-hidden="true">1.3.</strong> 첫 구현</a></li><li class="chapter-item expanded "><a href="../tutorial/errors.html"><strong aria-hidden="true">1.4.</strong> 더 나은 에러 보고</a></li><li class="chapter-item expanded "><a href="../tutorial/output.html"><strong aria-hidden="true">1.5.</strong> 사람과 기계를 위한 출력</a></li><li class="chapter-item expanded "><a href="../tutorial/testing.html"><strong aria-hidden="true">1.6.</strong> 테스트</a></li><li class="chapter-item expanded "><a href="../tutorial/packaging.html" class="active"><strong aria-hidden="true">1.7.</strong> 러스트 도구 패키징, 배포하기</a></li></ol></li><li class="chapter-item expanded "><a href="../in-depth/index.html"><strong aria-hidden="true">2.</strong> 더 깊은 주제</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../in-depth/signals.html"><strong aria-hidden="true">2.1.</strong> 시그널 다루기</a></li><li class="chapter-item expanded "><a href="../in-depth/config-files.html"><strong aria-hidden="true">2.2.</strong> 설정 파일 사용하기</a></li><li class="chapter-item expanded "><a href="../in-depth/exit-code.html"><strong aria-hidden="true">2.3.</strong> 종료 코드</a></li><li class="chapter-item expanded "><a href="../in-depth/human-communication.html"><strong aria-hidden="true">2.4.</strong> 사람과 소통하기</a></li><li class="chapter-item expanded "><a href="../in-depth/machine-communication.html"><strong aria-hidden="true">2.5.</strong> 기계와 소통하기</a></li><li class="chapter-item expanded "><a href="../in-depth/docs.html"><strong aria-hidden="true">2.6.</strong> CLI 앱을 위한 문서 렌더링하기</a></li></ol></li><li class="chapter-item expanded "><a href="../resources/index.html"><strong aria-hidden="true">3.</strong> 자료</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Command Line Applications in Rust</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parksb/rust-cli-book-ko-kr" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="러스트-도구-패키징-배포하기"><a class="header" href="#러스트-도구-패키징-배포하기">러스트 도구 패키징, 배포하기</a></h1>
+<p>다른 사람들에게 여러분의 프로그램을 공개할 수 있을 정도로 자신감이 생겼다면,
+이제 프로그램을 패키징하고 릴리즈할 때입니다!</p>
+<p>여기에는 몇 가지 방법이 있는데,
+“가장 빠르게 배포하는 방법“부터 “사용자에게 가장 편리한 방법“까지
+크게 세 가지의 방법을 살펴볼 것입니다.</p>
+<h2 id="가장-빠른-방법-cargo-publish"><a class="header" href="#가장-빠른-방법-cargo-publish">가장 빠른 방법: <code>cargo publish</code></a></h2>
+<p>앱을 공개하는 가장 쉬운 방법은 cargo를 이용하는 것입니다.
+프로젝트에 외부 디펜던시를 어떻게 추가하는지 기억하시나요?
+cargo는 기본 “크레이트 레지스트리“인 <a href="https://crates.io/">crates.io</a>에서 해당하는
+디펜던시를 다운로드합니다.
+<code>cargo publish</code>를 이용하면 바이너리 타겟을 비롯한
+여러분의 크레이트를 <a href="https://crates.io/">crates.io</a>에 공개할 수 있습니다.</p>
+<p><a href="https://crates.io/">crates.io</a>에 크레이트를 공개하는 것은 상당히 직관적입니다.
+우선 <a href="https://crates.io/">crates.io</a>에 계정이 없다면 가입하세요.
+현재로써는 GitHub을 통해 인증을 해야 하므로,
+GitHub 계정도 필요합니다.
+그 다음엔, 로컬 머신에서 cargo를 이용해 로그인합니다.
+이를 위해, <a href="https://crates.io/me">crates.io 계정 페이지</a>에 들어가서
+새 토큰을 생성하고 <code>cargo login &lt;새-토큰&gt;</code>을 실행하세요.
+이 과정은 컴퓨터당 한 번만 하면 됩니다.
+cargo의 <a href="https://doc.rust-lang.org/1.39.0/cargo/reference/publishing.html">퍼블리싱 가이드</a>에서 더 자세한
+내용을 배울 수 있습니다.</p>
+<p>이제 cargo는 crates.io에 따라 여러분을 알게 되었고,
+크레이트를 공개할 준비가 끝났습니다.
+새로운 크레이트(또는 새 버전)를 공개하기에 앞서,
+<code>Cargo.toml</code>을 열어 필수적인 메타데이터를 추가했는지
+한 번 더 봑인해 보는 것이 좋습니다.
+<code>Cargo.toml</code>에 설정할 수 있는 모든 필드는
+<a href="https://doc.rust-lang.org/1.39.0/cargo/reference/manifest.html">cargo 매니페스트 형식</a>에서 찾아볼 수 있습니다.
+아래는 빠르게 참고할만한 일반적인 예시입니다:</p>
+<pre><code class="language-toml">[package]
+name = &quot;grrs&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;Your Name &lt;your@email.com&gt;&quot;]
+license = &quot;MIT OR Apache-2.0&quot;
+description = &quot;A tool to search files&quot;
+readme = &quot;README.md&quot;
+homepage = &quot;https://github.com/you/grrs&quot;
+repository = &quot;https://github.com/you/grrs&quot;
+keywords = [&quot;cli&quot;, &quot;search&quot;, &quot;demo&quot;]
+categories = [&quot;command-line-utilities&quot;]
+</code></pre>
+<aside class="note">
+<p><strong>참고:</strong>
+이 예시에서는 러스트 프로젝트에 주로 채택하는 라이센스로
+필수 필드를 채웠습니다:
+러스트 컴파일러도 같은 라이센스를 사용하고 있습니다.
+또한 여기에서는 <code>README.md</code> 파일도 명시하고 있습니다.
+<code>README.md</code> 파일은 프로젝트에 대한 설명을 포함해야 하며,
+이 설명은 crates.io 페이지 뿐만 아니라
+GitHub의 저장소 페이지에도 노출됩니다.</p>
+</aside>
+<h3 id="cratesio에서-바이너리를-설치하는-방법"><a class="header" href="#cratesio에서-바이너리를-설치하는-방법">crates.io에서 바이너리를 설치하는 방법</a></h3>
+<p>앞서 crates.io에 크레이트를 공개하는 방법을 살펴봤는데,
+아마 어떻게 설치할 수 있는지도 궁금할 것입니다.
+<code>cargo build</code> (또는 이와 비슷한 명령)를 실행하면
+cargo가 알아서 라이브러리를 다운로드하고 컴파일해줬지만,
+바이너리를 설치할 때는 명시적으로
+어떤 바이너리를 설치할지 명시해야 합니다.</p>
+<p>바이너리 설치는 <code>cargo install &lt;크레이트-이름&gt;</code>으로 할 수 있습니다.
+이 명령은 기본적으로 크레이트를 다운로드하고,
+크레이트에 포함된 모든 바이너리 타켓을 컴파일한 다음
+(“릴리즈” 모드에서 시간이 조금 걸릴 수 있습니다.)
+그 결과물을 <code>~/.cargo/bin/</code> 디렉토리로 복사합니다.
+(셸이 설치된 바이너리를 찾을 수 있는지 확인하세요!)</p>
+<p>git 저장소를 통해 크레이트를
+설치할 수도 있습니다.
+또한 크레이트의 특정 바이너리만을 설치하거나,
+바이너리를 설치할 대체 디렉토리도 지정할 수 있습니다.
+자세한 정보는 <code>cargo install --help</code>를 참고하세요.</p>
+<h3 id="사용할-때"><a class="header" href="#사용할-때">사용할 때</a></h3>
+<p><code>cargo install</code>은 바이너리 크레이트를 설치하는 쉬운 방법입니다.
+이는 러스트 개발자가 사용하기에 매우 편리한 방법이지만,
+심각한 단점도 있습니다:
+이렇게 크레이트를 설치하면 항상 소스를
+밑바닥부터 컴파일하게 되며,
+사용자는 자신의 기기에 바이너리를 설치하기 위해
+러스트와 cargo, 그리고 여러분의 프로젝트가 요구하는
+모든 시스템 디펜던시를 필요로 하게 됩니다.
+거대한 러스트 코드베이스를 컴파일하면 시간이 오래 걸릴 수도 있습니다.</p>
+<p>다른 러스트 개발자를 대상으로 도구를 배포할 때는
+이렇게 하는 것이 가장 좋습니다.
+예를 들어:
+<code>cargo-tree</code> 또는 <code>cargo-outdated</code>와 같은
+많은 cargo 서브커맨드를 함께 설치할 수 있습니다.</p>
+<h2 id="바이너리-배포하기"><a class="header" href="#바이너리-배포하기">바이너리 배포하기</a></h2>
+<p>러스트는 네이티브 코드로 컴파일되고,
+기본적으로 모든 디펜던시를 정적으로 링크하는 언어입니다.
+<code>grrs</code>라는 바이너리를 가진 프로젝트에서
+<code>cargo build</code>를 실행하면,
+최종적으로 <code>grrs</code>라는 바이너리를 얻게 됩니다.
+시도해보세요:
+<code>cargo build</code>로 빌드하면 바이너리 파일이 <code>target/debug/grrs</code>에 만들어지고,
+<code>cargo build --release</code>로 빌드하면 <code>target/release/grrs</code>에 만들어집니다.
+대상 시스템에 특정 외부 라이브러리 설치를 필요로하는 크레이트
+(시스템 버전의 OpenSSL을 사용하는 등)를 사용하는 것이 아닌 이상,
+이렇게 만들어진 바이너리는 공통 시스템 라이브러리에만 의존합니다.
+즉, 파일 하나를 같은 운영 체제를 사용하는 다른 사람들에게 보내면
+파일을 받은 사람들이 바이너리를 실행할 수 있습니다.</p>
+<p>이것만으로도 이미 강력합니다!
+방금 본 <code>cargo install</code>의 두 가지 단점을 뛰어넘을 수 있습니다:
+사용자의 기기에 러스트를 설치할 필요도 없고,
+컴파일하기 위해 오랜 시간을 기다릴 필요도 없습니다.
+사용자는 바로 바이너리를 실행할 수 있습니다.</p>
+<p>앞서 봤듯이, <code>cargo build</code>는 우리를 위한 바이너리를 빌드합니다.
+유일한 문제는 그 바이너리를 모든 플랫폼에서 작동한다고 보장할 수 없다는 것입니다.
+여러분의 윈도우즈 머신에서 <code>cargo build</code>를 실행한다면
+기본적으로 맥에서 작동하는 바이너리를 없습니다.
+모든 플랫폼에서 작동하는 바이너리를 자동으로 생성할
+방법이 있을까요?</p>
+<h3 id="ci로-바이너리-릴리즈-빌드하기"><a class="header" href="#ci로-바이너리-릴리즈-빌드하기">CI로 바이너리 릴리즈 빌드하기</a></h3>
+<p>여러분의 도구가 오픈소스이고
+GitHub에서 호스트되고 있다면,
+매우 쉽게 <a href="https://travis-ci.com/">Travis CI</a>와 같은
+무료 CI(continuous integration) 서비스를 설정할 수 있습니다.
+(다른 플랫폼에서 작동하는 다른 서비스들도 있지만, Travis가 유명합니다.)
+CI는 기본적으로 저장소에 변경사항을 푸시할 때마다
+가상 머신에서 명령을 실행합니다.
+CI에서 어떤 명령을 사용할지,
+어떤 종류의 머신을 사용할지
+설정할 수 있습니다.
+예를 들어:
+러스트와 몇몇 일반적인 빌드 도구가 설치된 머신에서
+<code>cargo test</code>를 실행하는 것이 좋습니다.
+만약 테스트가 실패한다면,
+최신 변경사항에 문제가 있다는 사실을 알 수 있습니다.</p>
+<p>CI를 통해 바이너리를 빌드하고
+GitHub에 업로드할 수도 있습니다!
+실제로 <code>cargo build --release</code>를 실행하고
+어딘가에 바이너리를 업로드하면
+모든 준비가 끝납니다. 그렇죠?
+사실 그렇지 않습니다.
+우리가 빌드한 바이너리가
+최대한 많은 시스템과 호환되는지
+확인해야 합니다.
+예를 들어,
+리눅스에서는 현재 시스템이 아닌
+<code>x86_64-unknown-linux-musl</code>을 대상으로 컴파일을 하여
+기본 시스템 라이브러리에 의존하지 않도록 할 수 있습니다.
+macOS에서는 <code>MACOSX_DEPLOYMENT_TARGET</code>을 <code>10.7</code>로 설정하면
+10.7 버전 이상의 시스템에만 있는 기능에만 의존하도록 할 수 있습니다.</p>
+<p>이러한 바이너리 빌드 방법의 예시를 Linux, macOS를 대상으로 한
+<a href="https://github.com/rustwasm/wasm-pack/blob/51e6351c28fbd40745719e6d4a7bf26dadd30c85/.travis.yml#L74-L91">여기</a>과 윈도우즈를 대상으로 한
+<a href="https://github.com/rustwasm/wasm-pack/blob/51e6351c28fbd40745719e6d4a7bf26dadd30c85/.appveyor.yml">여기</a>에서 볼 수 있습니다.</p>
+<p>또 다른 방법은 바이너리를 빌드할 때 필요한
+모든 도구를 갖추고 있는 pre-built (도커) 이미지를 사용하는 것입니다.
+이를 통해 보다 다양한 플랫폼을 쉽게 공략할 수 있습니다.
+<a href="https://github.com/japaric/trust">trust</a> 프로젝트에는
+여러분의 프로젝트에 사용할 수 있는 스크립트와
+이를 설정하는 방법에 대한 설명이 있으며,
+AppVeyor를 통해 윈도우즈도 지원합니다.</p>
+<p>만약 로컬에서 모든 설정을 하고
+릴리즈 파일을 자신의 컴퓨터에 생성하고 싶은 경우에도
+<a href="https://github.com/japaric/trust">trust</a>를 확인해보세요.
+<a href="https://github.com/japaric/trust">trust</a>는 내부적으로 <a href="https://github.com/rust-embedded/cross">cross</a>를 사용하는데,
+이는 cargo와 비슷하게 동작하지만
+도커 컨테이너 내부의 cargo 프로세스로 명령을
+전달합니다.
+여기에 사용하는 이미지 정의는
+<a href="https://github.com/rust-embedded/cross">cross</a>에서도 사용할 수 있씁니다.</p>
+<h3 id="바이너리-설치하는-방법"><a class="header" href="#바이너리-설치하는-방법">바이너리 설치하는 방법</a></h3>
+<p>사용자에게 <a href="https://github.com/rustwasm/wasm-pack/releases/tag/v0.5.1">wasm-pack-release</a>와 같은 릴리즈 페이지를 제공하면
+사용자는 우리가 생성한 아티팩트를 다운로드할 수 있습니다.
+우리가 생성한 릴리즈 아티팩트는 특별한 것이 아닙니다:
+결국 바이너리를 포함한 아카이브 파일일 뿐입니다!
+즉, 여러분이 만든 도구의 사용자들은
+자신의 브라우저를 이용해 파일을 다운로드하고
+파일의 압축을 푼 다음(보통 자동으로 됩니다.),
+원하는 위치에 바이너리를 복사해 사용하게 됩니다.</p>
+<p>이러한 과정은 수동으로 프로그램을 “설치“하는 경험을 수반하기 때문에
+README 파일에 프로그램을 설치하는 방법에 대해
+설명하는 섹션을 추가할 필요가 있습니다.</p>
+<aside class="note">
+<p><strong>참고:</strong>
+만약 <a href="https://github.com/japaric/trust">trust</a>를 이용해 바이너리를 빌드하고, 이를 GitHub 릴리즈에 추가했다면 사람들에게
+<code>curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --git your-name/repo-name</code>를
+실행하라고 안내할 수도 있습니다.</p>
+</aside>
+<h3 id="사용할-때-1"><a class="header" href="#사용할-때-1">사용할 때</a></h3>
+<p>바이너리 릴리즈는 일반적으로 좋은 선택이며,
+단점이 거의 없습니다.
+사용자가 수동으로 도구를 설치하고
+업데이트해야 한다는 문제를 해결하지는 못하지만,
+러스트를 설치하지 않고 빠르게 최신 릴리즈 버전을
+설치할 수 있습니다.</p>
+<h3 id="바이너리에-추가로-패키징할-것"><a class="header" href="#바이너리에-추가로-패키징할-것">바이너리에 추가로 패키징할 것</a></h3>
+<p>이제 사용자가 릴리즈 빌드를 다운로드하면
+바이너리 파일만이 포함된 <code>.tar.gz</code> 파일을 얻게 됩니다.
+따라서 우리의 예시 프로젝트의 경우
+사용자는 하나의 실행 가능한 <code>grrs</code> 파일을 얻습니다.
+그런데 우리의 저장소에는 더 많은 파일이 있고,
+사용자가 추가적인 파일을 받길 원할 수도 있습니다.
+예를 들어 도구를 어떻게 사용해야 하는지 설명하는 README 파일이나
+라이센스 파일을 제공할 수 있습니다.
+프로젝트에 이미 파일이 있으므로,
+쉽게 추가할 수 있습니다.</p>
+<p>특히 커맨드라인 도구에 적합한 몇몇 흥미로운
+파일들이 있습니다:
+README 파일 외에 man 페이지를 추가로 제공하거나,
+셸에서 사용할 수 있는 플래그에 대한 자동완성 설정 파일을
+제공하는 건 어떨까요?
+이를 직접 손으로 작성할 수도 있겠지만,
+우리가 사용하는 인자 파싱 라이브러리 clap은
+파일을 자동으로 생성해 줍니다.
+더 자세한 내용은 이 책의 <a href="../in-depth/docs.html">더 깊은 주제</a>에서
+찾아보세요.</p>
+<h2 id="패키지-저장소를-통해-애플리케이션-설치하기"><a class="header" href="#패키지-저장소를-통해-애플리케이션-설치하기">패키지 저장소를 통해 애플리케이션 설치하기</a></h2>
+<p>앞서 살펴본 두 방법은 모두
+일반적으로 기기에 소프트웨어를 설치하는 방식은 아닙니다.
+특히 커맨드라인 툴은 대부분의 운영체제에서 글로벌 패키지
+매니저를 통해 설치합니다.
+이렇게 하면 사용자는 다른 프로그램을 설치하는 것과 같은 방식으로
+여러분의 프로그램을 설치할 수 있으므로,
+프로그램을 설치하는 방법에 대해 신경쓸 필요가 없습니다.
+이러한 패키지 매니저는 프로그램의 새 버전을 사용할 수 있게 됐을 때
+사용자가 프로그램을 업데이트할 수 있도록 해줍니다.</p>
+<p>슬프게도, 서로 다른 시스템을 지원한다는 것은
+각 시스템이 어떻게 동작하는지 살펴봐야 함을 의미합니다.
+어떤 경우에는 저장소에 파일을 추가하는 것만큼 쉬울 수도 있습니다.
+(가령, macOS의 <code>brew</code>를 사용하기 위해 <a href="https://github.com/BurntSushi/ripgrep/blob/31adff6f3c4bfefc9e77df40871f2989443e6827/pkg/brew/ripgrep-bin.rb">이것</a>과 같은 포뮬러(Formula) 파일을 추가할 수 있습니다.)
+하지만 그 외의 경우에는 대체로 직접 패치를 전송해 해당 패키지 매니저의 저장소에
+여러분의 프로그램을 추가해야 합니다.
+이때 <a href="https://crates.io/crates/cargo-bundle">cargo-bundle</a>,
+<a href="https://crates.io/crates/cargo-deb">cargo-deb</a>,
+<a href="https://crates.io/crates/cargo-aur">cargo-aur</a>과 같은 유용한 도구를 사용할 수 있습니다.
+이 챕터에서는 다양한 시스템에서 이들이 어떻게 동작하는지,
+어떻게 여러분의 프로그램을 올바르게 패키징할 수 있는지
+설명하지는 않습니다.</p>
+<p>대신 다양한 패키지 매니저에서 사용할 수 있는
+러스트 도구를 살펴보겠습니다.</p>
+<h3 id="예시-ripgrep"><a class="header" href="#예시-ripgrep">예시: ripgrep</a></h3>
+<p><a href="https://github.com/BurntSushi/ripgrep">ripgrep</a>은 러스트로 작성된 <code>grep</code>/<code>ack</code>/<code>ag</code> 대체품입니다.
+<a href="https://github.com/BurntSushi/ripgrep">ripgrep</a>은 매우 성공적인 프로젝트이며, 많은 운영체제에 대해 패키징되어 있습니다:
+프로젝트의 README에서 <a href="https://github.com/BurntSushi/ripgrep/tree/31adff6f3c4bfefc9e77df40871f2989443e6827#installation">“Installation” 섹션</a>을 살펴보세요!</p>
+<p>설치 방법에는 몇 가지 선택지가 있습니다:
+먼저 GitHub 릴리즈 링크를 통해 바이너리를 직접 다운로드하는 방법이 있습니다.
+또는 다양한 패키지 매니저를 통해 설치하는 방법도 있습니다.
+마지막으로 <code>cargo install</code>을 통해 설치하는 방법이 있습니다.</p>
+<p>여기에 나열된 방법 중 하나를 따르지 않고
+<code>cargo install</code>로 바이너리 릴리즈를 추가하는 것으로 시작해
+최종적으로 여러분의 도구를 시스템 패키지 매니저를 통해
+배포해보는 것도 것도 좋은 생각인 것 같습니다.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../tutorial/testing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../in-depth/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../tutorial/testing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../in-depth/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

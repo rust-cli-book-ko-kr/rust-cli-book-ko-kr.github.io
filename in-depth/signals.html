@@ -1,0 +1,351 @@
+<!DOCTYPE HTML>
+<html lang="ko" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>시그널 다루기 - Command Line Applications in Rust</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/special-content.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">시작하기</a></li><li class="chapter-item expanded "><a href="../tutorial/index.html"><strong aria-hidden="true">1.</strong> 15분 안에 커맨드라인 앱 작성하기</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/setup.html"><strong aria-hidden="true">1.1.</strong> 프로젝트 준비</a></li><li class="chapter-item expanded "><a href="../tutorial/cli-args.html"><strong aria-hidden="true">1.2.</strong> 커맨드라인 인자 파싱하기</a></li><li class="chapter-item expanded "><a href="../tutorial/impl-draft.html"><strong aria-hidden="true">1.3.</strong> 첫 구현</a></li><li class="chapter-item expanded "><a href="../tutorial/errors.html"><strong aria-hidden="true">1.4.</strong> 더 나은 에러 보고</a></li><li class="chapter-item expanded "><a href="../tutorial/output.html"><strong aria-hidden="true">1.5.</strong> 사람과 기계를 위한 출력</a></li><li class="chapter-item expanded "><a href="../tutorial/testing.html"><strong aria-hidden="true">1.6.</strong> 테스트</a></li><li class="chapter-item expanded "><a href="../tutorial/packaging.html"><strong aria-hidden="true">1.7.</strong> 러스트 도구 패키징, 배포하기</a></li></ol></li><li class="chapter-item expanded "><a href="../in-depth/index.html"><strong aria-hidden="true">2.</strong> 더 깊은 주제</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../in-depth/signals.html" class="active"><strong aria-hidden="true">2.1.</strong> 시그널 다루기</a></li><li class="chapter-item expanded "><a href="../in-depth/config-files.html"><strong aria-hidden="true">2.2.</strong> 설정 파일 사용하기</a></li><li class="chapter-item expanded "><a href="../in-depth/exit-code.html"><strong aria-hidden="true">2.3.</strong> 종료 코드</a></li><li class="chapter-item expanded "><a href="../in-depth/human-communication.html"><strong aria-hidden="true">2.4.</strong> 사람과 소통하기</a></li><li class="chapter-item expanded "><a href="../in-depth/machine-communication.html"><strong aria-hidden="true">2.5.</strong> 기계와 소통하기</a></li><li class="chapter-item expanded "><a href="../in-depth/docs.html"><strong aria-hidden="true">2.6.</strong> CLI 앱을 위한 문서 렌더링하기</a></li></ol></li><li class="chapter-item expanded "><a href="../resources/index.html"><strong aria-hidden="true">3.</strong> 자료</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Command Line Applications in Rust</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parksb/rust-cli-book-ko-kr" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="시그널-다루기"><a class="header" href="#시그널-다루기">시그널 다루기</a></h1>
+<p>커맨드라인 애플리케이션과 같은 프로세스는
+운영체제가 보낸 시그널에 반응해야 합니다.
+시그널의 가장 흔한 예시는 아마도, 일반적으로 프로세스를 종료시킬 때
+쓰는 <kbd>Ctrl</kbd>+<kbd>C</kbd>일 것 입니다.
+러스트 프로그램에서 시그널을 다루기 위해서는
+시그널에 반응하는 방법뿐 아니라
+시그널을 수신하는 방법에 대해서도 고민해 봐야 합니다.</p>
+<aside>
+<p><strong>참고:</strong>
+애플리케이션을 우아하게 종료할 필요가 없다면
+기본적인 처리 방식도 괜찮습니다.
+(즉, 프로그램을 즉시 종료하고, 파일 핸들러와
+같은 리소스는 OS가 정리하도록 하는 식입니다.)
+그런 경우에는 이 챕터의 내용을 따를 필요가 없습니다!</p>
+<p>그러나, 애플리케이션이 종료되기 전에 스스로 리소스를
+정리해야 하는 경우에는 이 챕터가 매우 중요합니다!
+예를 들어,
+애플리케이션이 적절하게 네트워크 커넥션을 닫아야 한다거나,
+(종료 전에 다른 프로세스에게 “good bye“를 보내는 동작)
+임시 파일을 지워야 한다거나,
+시스템 설정을 초기화하는 것과 같은
+절차가 필요할 수 있습니다.</p>
+</aside>
+<h2 id="운영체제-간-차이점"><a class="header" href="#운영체제-간-차이점">운영체제 간 차이점</a></h2>
+<p>유닉스 시스템(리눅스, macOS, FreeBSD 등)에서
+프로세스는 <a href="https://manpages.ubuntu.com/manpages/bionic/en/man7/signal.7.html">시그널</a>을 받을 수 있습니다.
+프로세스는 시그널을 받아서 프로그램이 정의한 방식으로
+시그널을 처리하는 기본적인 방법(OS가 제공)으로
+시그널에 반응할 수도 있고,
+시그널을 통째로 무시할 수도 있습니다.</p>
+<p>윈도우즈에는 시그널이 없습니다.
+대신 <a href="https://learn.microsoft.com/ko-kr/windows/console/console-control-handlers">콘솔 핸들러</a>를 이용하여 이벤트가 발생했을 때
+실행되는 콜백을 정의할 수 있습니다.
+또한 윈도우즈에는 0으로 나누기, 잘못된 접근, 스택오버플로우 등 모든 종류의
+시스템 예외를 처리할 수 있는 <a href="https://docs.microsoft.com/ko-kr/windows/desktop/debug/structured-exception-handling">구조적 예외 처리</a>도 있습니다.</p>
+<h2 id="ctrlc-다루기"><a class="header" href="#ctrlc-다루기">Ctrl+C 다루기</a></h2>
+<p><a href="https://crates.io/crates/ctrlc">ctrlc</a> 크레이트는 이름 그대로의 일을 합니다.
+<a href="https://crates.io/crates/ctrlc">ctrlc</a>는 다양한 플랫폼에 대해 사용자가
+<kbd>Ctrl</kbd>+<kbd>C</kbd>을 눌렀을 때
+프로그램이 반응할 수 있도록 만들어 줍니다.
+<a href="https://crates.io/crates/ctrlc">ctrlc</a>의 주요 사용법은 아래와 같습니다:</p>
+<pre><code class="language-rust ignore">use std::{thread, time::Duration};
+
+fn main() {
+    ctrlc::set_handler(move || {
+        println!(&quot;received Ctrl+C!&quot;);
+    })
+    .expect(&quot;Error setting Ctrl-C handler&quot;);
+
+    // 다음 코드는 실제로 동작하며, Ctrl-C로 인터럽트될 수 있다.
+    // 이 예시에서는 몇 초간 기다린다.
+    thread::sleep(Duration::from_secs(2));
+}</code></pre>
+<p>물론 이렇게 하면 별 도움이 되지 않습니다.
+메시지를 출력할 뿐 프로그램을 종료시키지는 않으니까요.</p>
+<p>실제 프로그램의 경우,
+시그널 핸들러에서 변수를 설정해
+프로그램 곳곳에서 상태를 체크하는 것이 좋습니다.
+예를 들어,
+시그널 핸들러에서 <code>Arc&lt;AtomicBool&gt;</code>
+(스레드 간에 공유할 수 있는 불리언 타입)
+변수를 설정하면, 루프(hot loop)를 돌거나
+스레드를 대기할 때 그 값을 주기적으로
+체크하면서 true가 되면 프로그램을
+종료하도록 할 수 있습니다.</p>
+<h2 id="다른-시그널-다루기"><a class="header" href="#다른-시그널-다루기">다른 시그널 다루기</a></h2>
+<p><a href="https://crates.io/crates/ctrlc">ctrlc</a> 크레이트는 <kbd>Ctrl</kbd>+<kbd>C</kbd>,
+혹은 유닉스 시스템에서 <code>SIGINT</code> (“인터럽트” 시그널)라고 불리는
+시그널만 다룰 수 있습니다.
+더 많은 유닉스 시그널에 반응하기 위해서는
+<a href="https://crates.io/crates/signal-hook">signal-hook</a>를 사용해야 합니다.
+<a href="https://crates.io/crates/signal-hook">signal-hook</a>의 설계는 <a href="https://vorner.github.io/2018/06/28/signal-hook.html">이 블로그 글</a>에
+설명되어 있으며, 현재 가장 광범위한 커뮤니티 지원을 받는 라이브러리입니다.</p>
+<p>여기 간단한 예시가 있습니다:</p>
+<pre><code class="language-rust ignore">use signal_hook::{consts::SIGINT, iterator::Signals};
+use std::{error::Error, thread, time::Duration};
+
+fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    let mut signals = Signals::new(&amp;[SIGINT])?;
+
+    thread::spawn(move || {
+        for sig in signals.forever() {
+            println!(&quot;Received signal {:?}&quot;, sig);
+        }
+    });
+
+    // 다음 코드는 실제로 동작하며, Ctrl-C로 인터럽트될 수 있다.
+    // 이 예시에서는 몇 초간 기다린다.
+    thread::sleep(Duration::from_secs(2));
+
+    Ok(())
+}</code></pre>
+<h2 id="채널-사용하기"><a class="header" href="#채널-사용하기">채널 사용하기</a></h2>
+<p>변수를 설정하고, 프로그램이 그 변수를 체크하도록 만드는 대신
+채널을 사용할 수 있습니다:
+채널을 만들면 시그널을 수신할 때마다 시그널 핸들러가
+채널로 값을 내보내 줍니다.
+애플리케이션 코드에서는 한 채널과
+다른 채널을 스레드 간의 동기화 지점으로 사용하게 됩니다.
+<a href="https://crates.io/crates/crossbeam-channel">crossbeam-channel</a>을 사용하면 아래와 같은 모습이 됩니다:</p>
+<pre><code class="language-rust ignore">use std::time::Duration;
+use crossbeam_channel::{bounded, tick, Receiver, select};
+use anyhow::Result;
+
+fn ctrl_channel() -&gt; Result&lt;Receiver&lt;()&gt;, ctrlc::Error&gt; {
+    let (sender, receiver) = bounded(100);
+    ctrlc::set_handler(move || {
+        let _ = sender.send(());
+    })?;
+
+    Ok(receiver)
+}
+
+fn main() -&gt; Result&lt;()&gt; {
+    let ctrl_c_events = ctrl_channel()?;
+    let ticks = tick(Duration::from_secs(1));
+
+    loop {
+        select! {
+            recv(ticks) -&gt; _ =&gt; {
+                println!(&quot;working!&quot;);
+            }
+            recv(ctrl_c_events) -&gt; _ =&gt; {
+                println!();
+                println!(&quot;Goodbye!&quot;);
+                break;
+            }
+        }
+    }
+
+    Ok(())
+}</code></pre>
+<h2 id="퓨쳐futures와-스트림-사용하기"><a class="header" href="#퓨쳐futures와-스트림-사용하기">퓨쳐(futures)와 스트림 사용하기</a></h2>
+<p><a href="https://tokio.rs/">tokio</a>를 사용하고 있다면,
+여러분은 이미 비동기 패턴과 이벤트 주도 설계를 적용하여
+애플리케이션을 작성하고 있을 확률이 높습니다.
+이때는 crossbeam의 채널을 직접 사용하지 않고
+<a href="https://crates.io/crates/signal-hook">signal-hook</a>의 <code>tokio-support</code> 기능을 사용할 수 있습니다.
+이 기능을 이용하면 <a href="https://crates.io/crates/signal-hook">signal-hook</a>의 <code>Signals</code> 타입에 대해
+<a href="https://docs.rs/signal-hook/0.1.6/signal_hook/iterator/struct.Signals.html#method.into_async"><code>.into_async()</code></a>를 호출하여 <code>futures::Stream</code>을 구현하는
+새로운 타입을 얻을 수 있습니다.</p>
+<h2 id="첫-ctrlc-시그널을-처리하는-도중-또-다른-ctrlc-시그널을-수신했을-때"><a class="header" href="#첫-ctrlc-시그널을-처리하는-도중-또-다른-ctrlc-시그널을-수신했을-때">첫 Ctrl+C 시그널을 처리하는 도중 또 다른 Ctrl+C 시그널을 수신했을 때</a></h2>
+<p>사용자가 <kbd>Ctrl</kbd>+<kbd>C</kbd>를 누르면
+여러분의 프로그램은 몇 초 뒤 종료되거나
+진행 상황을 알려줄 것입니다.
+만약 그렇지 않으면 사용자는
+<kbd>Ctrl</kbd>+<kbd>C</kbd>을 한 번 더 누를 것입니다.
+이때 일반적인 동작은 애플리케이션을 즉시 종료하는 것입니다.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../in-depth/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../in-depth/config-files.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../in-depth/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../in-depth/config-files.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

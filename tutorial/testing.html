@@ -1,0 +1,629 @@
+<!DOCTYPE HTML>
+<html lang="ko" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>테스트 - Command Line Applications in Rust</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../src/special-content.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">시작하기</a></li><li class="chapter-item expanded "><a href="../tutorial/index.html"><strong aria-hidden="true">1.</strong> 15분 안에 커맨드라인 앱 작성하기</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/setup.html"><strong aria-hidden="true">1.1.</strong> 프로젝트 준비</a></li><li class="chapter-item expanded "><a href="../tutorial/cli-args.html"><strong aria-hidden="true">1.2.</strong> 커맨드라인 인자 파싱하기</a></li><li class="chapter-item expanded "><a href="../tutorial/impl-draft.html"><strong aria-hidden="true">1.3.</strong> 첫 구현</a></li><li class="chapter-item expanded "><a href="../tutorial/errors.html"><strong aria-hidden="true">1.4.</strong> 더 나은 에러 보고</a></li><li class="chapter-item expanded "><a href="../tutorial/output.html"><strong aria-hidden="true">1.5.</strong> 사람과 기계를 위한 출력</a></li><li class="chapter-item expanded "><a href="../tutorial/testing.html" class="active"><strong aria-hidden="true">1.6.</strong> 테스트</a></li><li class="chapter-item expanded "><a href="../tutorial/packaging.html"><strong aria-hidden="true">1.7.</strong> 러스트 도구 패키징, 배포하기</a></li></ol></li><li class="chapter-item expanded "><a href="../in-depth/index.html"><strong aria-hidden="true">2.</strong> 더 깊은 주제</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../in-depth/signals.html"><strong aria-hidden="true">2.1.</strong> 시그널 다루기</a></li><li class="chapter-item expanded "><a href="../in-depth/config-files.html"><strong aria-hidden="true">2.2.</strong> 설정 파일 사용하기</a></li><li class="chapter-item expanded "><a href="../in-depth/exit-code.html"><strong aria-hidden="true">2.3.</strong> 종료 코드</a></li><li class="chapter-item expanded "><a href="../in-depth/human-communication.html"><strong aria-hidden="true">2.4.</strong> 사람과 소통하기</a></li><li class="chapter-item expanded "><a href="../in-depth/machine-communication.html"><strong aria-hidden="true">2.5.</strong> 기계와 소통하기</a></li><li class="chapter-item expanded "><a href="../in-depth/docs.html"><strong aria-hidden="true">2.6.</strong> CLI 앱을 위한 문서 렌더링하기</a></li></ol></li><li class="chapter-item expanded "><a href="../resources/index.html"><strong aria-hidden="true">3.</strong> 자료</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Command Line Applications in Rust</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/parksb/rust-cli-book-ko-kr" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="테스트"><a class="header" href="#테스트">테스트</a></h1>
+<p>지난 수십 년간 소프트웨어 개발 분야에서
+사람들은 한 가지 진실을 발견했습니다:
+테스트하지 않은 소프트웨어는 대부분 동작하지 않는다.
+(많은 사람들이 더 나아가서 “테스트한 소프트웨어도 대체로 동작하지 않는다“고 말합니다.
+그래도 여기서 우리는 모두 낙관론자입니다. 그렇죠?)
+따라서, 프로그램이 예상대로 동작하는지 확인하려면
+테스트를 하는 것이 현명합니다.</p>
+<p>한 가지 쉬운 방법은 <code>README</code> 파일에
+프로그램이 어떻게 동작해야 하는
+작성하는 것입니다.
+그러면 새로운 버전을 출시할 준비가 됐을 때
+<code>README</code> 파일을 읽어보고 프로그램이
+예상대로 동작하는지 확인할 수 있습니다.
+이때 프로그램이 잘못된 입력에 대해 어떻게 동작해야 하는지도
+적어두면 더 엄격히 검증할 수 있습니다.</p>
+<p>또 다른 그럴듯한 아이디어가 있습니다:
+바로 코드를 작성하기 전에 <code>README</code>를 작성하는 것입니다.</p>
+<aside>
+<p><strong>참고:</strong>
+<a href="TDD">테스트 주도 개발</a>를 처음 들어본다면
+확인해보세요.</p>
+</aside>
+<h2 id="테스트-자동화"><a class="header" href="#테스트-자동화">테스트 자동화</a></h2>
+<p>모든 것이 멋져 보이지만,
+이 모든 것을 수동으로 해야 할까요?
+수동으로 하면 시간이 오래 걸릴 수 있습니다.
+또한 많은 사람들이 컴퓨터에게 자신을 위해
+뭔가를 수행하도록 지시하는 것을 좋아합니다.
+이제 테스트를 자동화하는 방법에 대해 살펴보겠습니다.</p>
+<p>러스트는 빌트인 테스트 프레임워크를 갖추고 있습니다.
+첫 테스트를 작성해봅시다:</p>
+<pre><code class="language-rust ignore"><span class="boring">fn answer() -&gt; i32 {
+</span><span class="boring">  42
+</span><span class="boring">}
+</span><span class="boring">
+</span>#[test]
+fn check_answer_validity() {
+    assert_eq!(answer(), 42);
+}</code></pre>
+<p>위의 코드 스니펫을 아무 파일에나 작성하고
+<code>cargo test</code>를 실행하면 테스트가 시작됩니다.
+여기서 핵심은 <code>#[test]</code> 속성입니다.
+이 속성은 빌드 시스템이 위와 같은 함수를 찾고
+테스트로 실행해 패닉이 일어나지 않음을
+검증할 수 있도록 해줍니다.</p>
+<aside class="exercise">
+<p><strong>연습:</strong>
+이 테스트가 동작하도록 만들어 보세요.</p>
+<p>아래와 같은 출력이 나와야 합니다:</p>
+<pre><code class="language-text">running 1 test
+test check_answer_validity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+</code></pre>
+</aside>
+<p>우리는 테스트를 <em>어떻게</em> 작성하는지 살펴봤고,
+이제 <em>무엇을</em> 테스트할지 알아내야 합니다.
+앞서 봤듯이 함수를 어서션(assertion)하는 테스트를
+작성하기는 매우 쉽습니다.
+하지만 CLI 애플리케이션에는 보통 여러 함수가 있습니다.
+심지어 그 함수들이 사용자의 입력을 받고, 파일을 읽으며,
+출력을 냅니다.</p>
+<h2 id="코드를-테스트-가능하게-만들기"><a class="header" href="#코드를-테스트-가능하게-만들기">코드를 테스트 가능하게 만들기</a></h2>
+<p>기능 테스트에는 두 가지의 보완적 접근법이 있습니다:
+하나는 전체 애플리케이션을 빌드할 때 사용되는
+작은 단위를 테스트하는 “유닛 테스트“입니다.
+다른 하나는 “외부에서” 최종 애플리케이션을 테스트하는
+“블랙 박스 테스트” 또는 “통합 테스트“입니다.
+유닛 테스트부터 시작해 봅시다.</p>
+<p>무엇을 테스트할지 알아내기 위해서는
+프로그램의 기능을 살펴봐야 합니다.
+<code>grrs</code>의 주요 기능은 주어진 패턴에 일치하는 라인을 출력하는 것입니다.
+따라서 <em>정확히 이 기능</em> 에 대한 테스트를 작성해 봅시다.
+우리는 로직의 가장 중요한 부분이 동작하는지 확인해야 하고,
+이를 둘러싼 어떠한 설정 코드(예를 들어 CLI 인자를 다루는 코드)에도
+의존하지 않는 방식으로 테스트를 해야 합니다.</p>
+<p><code>grrs</code>의 <a href="impl-draft.html">첫 구현</a>에서
+우리는 <code>main</code> 함수에 아래 코드 블록을 추가했습니다:</p>
+<pre><code class="language-rust ignore">// ...
+for line in content.lines() {
+    if line.contains(&amp;args.pattern) {
+        println!(&quot;{}&quot;, line);
+    }
+}</code></pre>
+<p>슬프게도, 이 코드는 테스트하기 어렵습니다.
+일단 코드가 메인 함수 안에 있기 때문에 호출하는 것부터 쉽지 않습니다.
+이 문제는 별도 함수로 코드 조각을 분리함으로써 쉽게 개선할 수 있습니다:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn find_matches(content: &amp;str, pattern: &amp;str) {
+    for line in content.lines() {
+        if line.contains(pattern) {
+            println!(&quot;{}&quot;, line);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>이제 테스트에서 함수를 호출할 수 있습니다:</p>
+<pre><code class="language-rust ignore">#[test]
+fn find_a_match() {
+    find_matches(&quot;lorem ipsum\ndolor sit amet&quot;, &quot;lorem&quot;);
+    assert_eq!( // uhhhh</code></pre>
+<p>이렇게 할 수 있을까요?
+여기서 <code>find_matches</code>는 <code>stdout</code>, 즉, 터미널에 직접 결과를 출력합니다.
+테스트에서는 그 출력을 쉽게 포착할 수가 없습니다.
+구현한 뒤에 테스트를 작성하면 함수가 사용되는 맥락 안에 함수를 완전히
+통합하게 되기 때문에 이런 문제가 자주 일어납니다.</p>
+<aside class="note">
+<p><strong>참고:</strong>
+작은 CLI 애플리케이션을 작성할 때는 그래도 전혀 문제가 없습니다.
+모든 것을 테스트 가능하게 만들 필요는 없죠!
+하지만 코드의 어느 부분에 대해 유닛 테스트를 작성할지
+고민하는 것은 중요합니다.
+아래에서 이 함수를 쉽게 테스트 가능한 형태로 개선하겠지만,
+항상 간단하지는 않습니다.</p>
+</aside>
+<p>좋습니다, 위 코드를 어떻게 테스트 가능하게 바꿀 수 있을까요?
+어떻게든 출력을 포착할 방법이 필요할 것입니다.
+러스트의 표준 라이브러리는 I/O (input/output)을 다루기 위한
+몇 가지 깔끔한 추상화를 제공하며,
+여기서는 <a href="https://doc.rust-lang.org/1.39.0/std/io/trait.Write.html"><code>std::io::Write</code></a>를 사용해 볼 것입니다.
+<a href="https://doc.rust-lang.org/1.39.0/std/io/trait.Write.html"><code>std::io::Write</code></a>는 문자열 뿐만 아니라, <code>stdout</code>까지 비롯한
+쓰기 동작을 추상화해주는 <a href="https://doc.rust-lang.org/book/ch10-02-traits.html">트레잇</a>입니다.</p>
+<p>러스트에서 “트레잇“을 처음 들어봤다면,
+아마 마음에 들 것입니다.
+트레잇은 러스트의 강력한 기능 중 하나로,
+자바의 인터페이스나 하스켈의 타입 클래스와 비슷하다고 생각할 수 있습니다.
+(여러분이 더 친숙한 쪽으로 생각해 보세요.)
+이들은 서로 다른 타입이 공유하는 동작을 추상화할 수 있도록 해줍니다.
+트레잇을 사용하는 코드는 개념을
+매우 범용적이면서 유연한 방식으로 표현할 수 있게 됩니다.
+다만 이로 인해 코드를 읽기 어려워지기도 합니다.
+겁먹지는 마세요. 수년간 러스트를 사용해 온 사람들도
+범용적인 코드를 바로 작성하지는 못합니다.
+그럴 때는 구체적인 용도를 생각해 보는 것이 도움 됩니다.
+예를 들어, 우리는 “무언가에 쓴다“라는 동작을
+추상화하고자 합니다.
+<a href="https://doc.rust-lang.org/1.39.0/std/io/trait.Write.html"><code>std::io::Write</code></a>를 구현(“impl”)하는 타입에는
+터미널의 표준 출력,
+파일,
+메모리 버퍼,
+TCP 네트워크 커넥션 등이 있습니다.
+(<a href="https://doc.rust-lang.org/1.39.0/std/io/trait.Write.html"><code>std::io::Write</code> 문서</a>에서 스크롤을 내려보면
+“Implementors” 목록을 볼 수 있습니다.)</p>
+<p>이러한 배경 지식을 바탕으로,
+우리의 함수가 세 번째 파라미터를 받도록 수정해 봅시다.
+파라미터는 <code>Write</code>를 구현하는 타입이어야 합니다.
+이를 통해
+테스트에 간단한 문자열을 전달하고,
+그 값을 어서션할 수 있게 됩니다.
+아래는 수정된 <code>find_matches</code> 코드입니다:</p>
+<pre><code class="language-rust ignore">fn find_matches(content: &amp;str, pattern: &amp;str, mut writer: impl std::io::Write) {
+    for line in content.lines() {
+        if line.contains(pattern) {
+            writeln!(writer, &quot;{}&quot;, line);
+        }
+    }
+}</code></pre>
+<p>새로운 파라미터는 <code>mut writer</code>입니다.
+(즉, “writer“라고 부르는 가변적인 값입니다.)
+이 파라미터의 타입은 <code>impl std::io::Write</code>이며,
+이를 “<code>Write</code> 트레잇을 구현하는 타입을 위한 플레이스홀더“라고
+읽을 수 있습니다.
+또한 앞서 작성한 <code>println!(…)</code>이
+<code>writeln!(writer, …)</code>으로 바뀌었습니다.
+<code>println!</code>은 <code>writeln!</code>과 똑같이 동작하지만
+항상 표준 출력을 사용합니다.</p>
+<p>이제 출력을 아래와 같이 테스트할 수 있습니다:</p>
+<pre><code class="language-rust ignore">#[test]
+fn find_a_match() {
+    let mut result = Vec::new();
+    find_matches(&quot;lorem ipsum\ndolor sit amet&quot;, &quot;lorem&quot;, &amp;mut result);
+    assert_eq!(result, b&quot;lorem ipsum\n&quot;);
+}</code></pre>
+<p>이 함수를 애플리케이션 코드에 사용하기 위해서는
+<code>main</code>의 <code>find_matches</code>에 세 번째 파라미터로
+<a href="https://doc.rust-lang.org/1.39.0/std/io/fn.stdout.html"><code>&amp;mut std::io::stdout()</code></a>를 전달하도록 변경해야 합니다.
+아래는 이전 챕터에서 살펴본 메인 함수가
+앞서 작성한 <code>find_matches</code> 함수를 사용하는 예시입니다:</p>
+<pre><code class="language-rust ignore">fn main() -&gt; Result&lt;()&gt; {
+    let args = Cli::parse();
+    let content = std::fs::read_to_string(&amp;args.path)
+        .with_context(|| format!(&quot;could not read file `{}`&quot;, args.path.display()))?;
+
+    find_matches(&amp;content, &amp;args.pattern, &amp;mut std::io::stdout());
+
+    Ok(())
+}</code></pre>
+<aside class="note">
+<p><strong>참고:</strong>
+<code>stdout</code>은 문자열이 아니라 바이트이기 때문에
+<code>std::fmt::Write</code> 대신 <code>std::io::Write</code>를 사용했습니다.
+결과적으로 테스트에서는 빈 벡터(<code>Vec&lt;u8&gt;</code>로 타입 추론)를 “writer“로
+전달했으며, <code>assert_eq!</code>에서는 <code>b&quot;foo&quot;</code>를 사용했습니다.
+(<code>b</code> 접두사는 문자열을 <em>바이트 문자열 리터럴</em> 로 만들어 줍니다.
+따라서 이 타입은 <code>&amp;str</code>이 아니라 <code>&amp;[u8]</code>이 됩니다.)</p>
+</aside>
+<aside class="note">
+<p><strong>참고:</strong>
+<code>find_matches</code>가 <code>String</code>을 반환하도록 만들 수도 있지만,
+그러려면 동작을 변경해야 합니다.
+터미널에 직접 쓰기를 하는 대신
+모든 것을 하나의 문자열에 모으고,
+한번에 덤프하는 방식으로 할 수 있습니다.</p>
+</aside>
+<aside class="exercise">
+<p><strong>연습:</strong>
+버퍼가 꽉 차서 확장할 수 없을 때는
+쓰기가 실패할 수 있기 때문에
+<a href="https://doc.rust-lang.org/1.39.0/std/macro.writeln.html"><code>writeln!</code></a>는 <a href="https://doc.rust-lang.org/1.39.0/std/io/type.Result.html"><code>io::Result</code></a>를 반환합니다.
+<code>find_matches</code>가 에러를 다루도록 수정해보세요.</p>
+</aside>
+<p>앞서 하나의 코드 조각을 쉽게 테스트 가능하도록 만드는
+방법에 대해 알아봤습니다. 우리는,</p>
+<ol>
+<li>애플리케이션의 핵심 부분 중 하나를 명확히 알게 되었고,</li>
+<li>그 부분을 자체적인 함수로 추출했으며,</li>
+<li>코드를 더욱 유연하게 만들었습니다.</li>
+</ol>
+<p>처음에는 그저 코드를 테스트 가능하게 만드는 것이 목표였지만,
+결과적으로 매우 자연스럽고, 재사용 가능한
+러스트 코드를 얻었습니다.
+놀라운 일이죠!</p>
+<h2 id="코드를-라이브러리와-바이너리-타겟으로-쪼개기"><a class="header" href="#코드를-라이브러리와-바이너리-타겟으로-쪼개기">코드를 라이브러리와 바이너리 타겟으로 쪼개기</a></h2>
+<p>여기서 하나를 더 해볼 수 있습니다.
+지금까지는 모든 코드를 <code>src/main.rs</code> 파일에만 작성했습니다.
+이는 현재 프로젝트가 하나의 바이너리로 만들어진다는 것을 의미합니다.
+그런데 코드를 라이브러리로도 만들 수 있습니다. 이렇게요:</p>
+<ol>
+<li><code>find_matches</code> 함수를 새로 만든 <code>src/lib.rs</code> 파일에 넣습니다.</li>
+<li><code>fn</code> 앞에 <code>pub</code>을 추가합니다. 따라서 <code>pub fn find_matches</code>가 됩니다.</li>
+<li><code>src/main.rs</code>에서 <code>find_matches</code>를 지웁니다.</li>
+<li><code>fn main</code>에서 <code>find_matches</code>를 호출하는 부분 앞에 <code>grrs::</code>를 붙입니다.
+따라서 <code>grrs::find_matches(…)</code>가 됩니다.
+이것은 우리가 방금 작성한 라이브러리의 함수를 사용한다는 의미입니다!</li>
+</ol>
+<p>러스트가 프로젝트를 다루는 방식은 매우 유연하며,
+크레이트의 라이브러리 부분에 어떤 내용을
+작성할지 초기에 생각해보는 것이 좋습니다.
+예를 들어, 애플리케이션에 특정된 로직을 위한
+라이브러리를 먼저 작성한 다음, 그 라이브러리를
+다른 라이브러리처럼 CLI에서 사용할 수 있습니다.
+또는, 프로젝트에 여러 바이너리가 있는 경우
+크레이트의 라이브러리 부분에 공통 기능을 작성할 수 있습니다.</p>
+<aside class="note">
+<p><strong>참고:</strong>
+<code>src/main.rs</code>에 모든 것을 집어 넣으면
+앞으로 코드를 읽기 어려워 집니다.
+<a href="https://doc.rust-lang.org/1.39.0/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html">모듈 시스템</a>이 여러분의 코드를 구조화하고 구성하는 데 도움을 줄 수 있습니다.</p>
+</aside>
+<h2 id="cli-애플리케이션을-실행해서-테스트하기"><a class="header" href="#cli-애플리케이션을-실행해서-테스트하기">CLI 애플리케이션을 실행해서 테스트하기</a></h2>
+<p>지금까지 우리는 애플리케이션의 비즈니스 로직을
+테스트하기 위해 노력했고, 주요 로직이
+<code>find_matches</code> 함수임을 알아냈습니다.
+이러한 과정은 매우 가치있으며,
+잘 테스트된(well-tested) 코드 베이스를 향한
+훌륭한 첫 걸음이기도 합니다.
+(이런 종류의 테스트를 보통 “유닛 테스트“라고 부릅니다.)</p>
+<p>그러나 바깥 세상과 상호작용하기 위해
+작성한 코드는 아직 테스트하지 않았습니다.
+만약 메인 함수를 작성했는데 실수로
+사용자가 제공하는 경로 인자 대신,
+하드 코딩된 문자열을 사용하는 코드를
+남겨뒀다고 상상해보세요.
+이에 대한 테스트도 작성해야 합니다!
+(이 수준의 테스트를 주로
+“통합 테스트” 또는 “시스템 테스트“라고 부릅니다.)</p>
+<p><code>tests/cli.rs</code>.
+우리는 여전히 함수를 작성하고
+그 함수를 <code>#[test]</code>로 표시하고 있습니다.
+이때는 함수 안에서 무슨 일이 일어나는지만이 중요합니다.
+예를 들어, 프로젝트의 메인 바이너리를
+사용해 일반적인 프로그램처럼 실행하려 합니다.
+여러분은 이에 대한 테스트를 새로운 디렉토리에
+새 파일(<code>tests/cli.rs</code>)로 집어 넣을 것입니다:</p>
+<aside>
+<p><strong>참고:</strong>
+관례적으로 <code>cargo</code>는 <code>tests/</code> 디렉토리에서
+통합 테스트를 찾아봅니다.
+마찬가지로
+벤치마크는 <code>benches/</code>에서,
+예시는 <code>examples/</code>에서 찾습니다.
+이런 관례는 여러분의 주요 소스코드로도 확장됩니다.
+라이브러리는 <code>src/lib.rs</code> 파일에서,
+메인 바이너리는 <code>src/main.rs</code>에서 찾습니다.
+만약 여러 개의 바이너리가 있다면,
+cargo는 바이너리들이 <code>src/bin/&lt;name&gt;.rs</code>에 있을 것이라고 예상합니다.
+관례를 따르면 러스트 코드를 읽는 데 익숙한 사람들로 하여금
+여러분의 코드를 더욱 쉽게 탐색할 수 있도록 만들 수 있습니다.</p>
+</aside>
+<p>다시 돌아가서,
+<code>grrs</code>은 파일의 문자열을 찾는 작은 도구입니다.
+우리는 앞서 일치하는 문자열을 찾는 기능에 대한 테스트를 작성했습니다.
+이제 테스트할 수 있는 다른 것들에 대해 생각해봅시다.</p>
+<p>여기 몇 가지가 있습니다.</p>
+<ul>
+<li>파일이 존재하지 않을 때는 무슨 일이 일어나나요?</li>
+<li>일치하는 문자열이 없는 경우 무엇이 출력되나요?</li>
+<li>인자 하나(또는 둘 다)를 전달하지 않으면 프로그램이 에러와 함께 종료되나요?</li>
+</ul>
+<p>이들은 모두 유효한 테스트 케이스입니다.
+추가로,
+우리는 “행복한 경우“에 대한 테스트도 케이스도
+하나 작성해야 합니다.
+가령, 최소 하나의 일치하는 문자열을 찾고,
+그 라인을 출력하는 동작에 대한 테스트 케이스가 있습니다.</p>
+<p>이런 종류의 테스트를 쉽게 작성하기 위해,
+<a href="https://docs.rs/assert_cmd"><code>assert_cmd</code></a> 크레이트를 사용할 것입니다.
+<a href="https://docs.rs/assert_cmd"><code>assert_cmd</code></a>는 메인 바이너리를 실행하고,
+실행된 바이너리가 어떻게 동작하는지 보여주는
+간결한 도구들을 제공합니다.
+더 나아가,
+<a href="https://docs.rs/assert_cmd"><code>assert_cmd</code></a>가 테스트할 어서션을
+작성할 때 도움을 받기 위하여
+(그리고 훌륭한 에러 메시지를 위하여)
+<a href="https://docs.rs/predicates"><code>predicates</code></a> 크레이트도 추가할 것입니다.
+이 두 디펜던시는 메인 리스트에 추가하지 않고
+<code>Cargo.toml</code> 파일의 “개발 디펜던시“에
+추가합니다.
+두 디펜던시가 크레이트를 개발할 때만 필요하고,
+실제로 사용할 때는 필요하지 않기 때문입니다.</p>
+<pre><code class="language-toml">[dev-dependencies]
+assert_cmd = &quot;2.0.11&quot;
+predicates = &quot;3.0.3&quot;
+</code></pre>
+<p>많은 준비가 필요해 보이죠.
+그래도 <code>tests/cli.rs</code> 파일을 만들며
+시작해 봅시다:</p>
+<pre><code class="language-rust ignore">use assert_cmd::prelude::*; // 명령에 메서드 추가
+use predicates::prelude::*; // 어서션 작성에 사용
+use std::process::Command; // 프로그램을 실행
+
+#[test]
+fn file_doesnt_exist() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    let mut cmd = Command::cargo_bin(&quot;grrs&quot;)?;
+
+    cmd.arg(&quot;foobar&quot;).arg(&quot;test/file/doesnt/exist&quot;);
+    cmd.assert()
+        .failure()
+        .stderr(predicate::str::contains(&quot;could not read file&quot;));
+
+    Ok(())
+}</code></pre>
+<p>이 테스트는 앞서 작성한 다른 테스트들과 마찬가지로
+<code>cargo test</code>로 실행할 수 있습니다.
+처음 실행할 때는 <code>Command::cargo_bin(&quot;grrs&quot;)</code>가
+메인 바이너리를 컴파일해야 하기 때문에
+시간이 조금 걸릴 수 있습니다.</p>
+<h2 id="테스트-파일-생성하기"><a class="header" href="#테스트-파일-생성하기">테스트 파일 생성하기</a></h2>
+<p>앞서 작성한 테스트는 입력 파일이 존재하지 않을 때
+프로그램이 출력하는 에러 메시지만을 체크했습니다.
+이것이 중요한 테스트이기는 하지만,
+가장 중요하지는 않습니다.
+이제 파일에서 찾은 일치 문자열을 실제로 출력하는지 테스트해보겠습니다!</p>
+<p>우리가 아는 내용으로 채워진 파일이 필요합니다.
+그렇다면 우리는 프로그램이 무엇을 반환해야 하는지 예상할 수 있고,
+코드에서 그 예상을 체크할 수 있습니다.
+프로젝트에 우리가 임의의 내용으로 채운 파일을 하나 추가하고,
+이 파일을 테스트에 사용하는 방식을 생각해볼 수 있습니다.
+또 다른 방식은 테스트에서 임시 파일을 생성할 수도 있습니다.
+튜토리얼을 위해
+후자의 접근 방식을 살펴보도록 하겠습니다.
+임시 파일을 생성하는 방식은 유연하며,
+파일을 변경하는 프로그램을 테스트할 때도
+테스트가 잘 동작하도록 만들 수 있습니다.</p>
+<p>임시 파일을 만들기 위해,
+<a href="https://docs.rs/assert_fs"><code>assert_fs</code></a> 크레이트를 사용할 것입니다.
+<code>Cargo.toml</code> 파일의 <code>dev-dependencies</code>에
+추가해봅시다:</p>
+<pre><code class="language-toml">assert_fs = &quot;1.0.13&quot;
+</code></pre>
+<p>아래는 임시 파일 (경로를 알 수 있도록 이름이 지정된 파일)을
+먼저 만들고 임의의 텍스트로 채운 다음,
+프로그램을 실행하여 올바를 출력을 얻을 수 있는지
+확인하는 새로운 테스트 케이스입니다.
+이 테스트 케이스를 다른 케이스 아래에 작성할 수 있습니다.
+<code>file</code>이 (함수의 끝에서) 스코프를 벗어나면,
+실제 임시 파일이 자동으로 삭제됩니다.</p>
+<pre><code class="language-rust ignore">use assert_fs::prelude::*;
+
+#[test]
+fn find_content_in_file() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    let file = assert_fs::NamedTempFile::new(&quot;sample.txt&quot;)?;
+    file.write_str(&quot;A test\nActual content\nMore content\nAnother test&quot;)?;
+
+    let mut cmd = Command::cargo_bin(&quot;grrs&quot;)?;
+    cmd.arg(&quot;test&quot;).arg(file.path());
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains(&quot;test\nAnother test&quot;));
+
+    Ok(())
+}</code></pre>
+<aside class="exercise">
+<p><strong>연습:</strong>
+패턴으로 빈 문자열을 전달하는 케이스에 대한 통합 테스트를 추가해보세요.
+필요하다면 프로그램을 수정해도 좋습니다.</p>
+</aside>
+<h2 id="무엇을-테스트할-것인가"><a class="header" href="#무엇을-테스트할-것인가">무엇을 테스트할 것인가?</a></h2>
+<p>통합 테스트를 작성하는 것이 분명 재밌을 수도 있지만,
+테스트를 작성하는 데 드는 시간이
+애플리케이션의 동작을 변경할 때만큼 필요할 수도 있습니다.
+시간을 현명하게 사용하기 위해서는
+스스로에게 무엇을 테스트해야 하는지 물어야 합니다.</p>
+<p>사용자에게 노출되는 모든 종류의 행동에 대한
+통합 테스트를 작성하는 것이 일반적으로 좋은 생각이기는 합니다.
+다만 모든 엣지 케이스를 커버할 필요는 없습니다.
+보통 다양한 유형에 대한 예시를 만드는 것으로 충분하며,
+엣지 케이스는 유닛 테스트에 맡기면 됩니다.</p>
+<p>여러분이 적극적으로 통제할 수 없는 것에 대해 테스트를 집중하지 않는 것도 좋은 생각입니다.
+<code>--help</code>가 출력하는 세세한 내용을 테스트하는 것은 좋은 생각이 아닙니다.
+대신 특정 요소가 노출되는지만 테스트하는 것이 좋습니다.</p>
+<p>프로그램의 특성에 따라,
+더 많은 테스트 기법을 추가해볼 수도 있습니다.
+예를 들어,
+프로그램의 일부를 추출해
+모든 엣지 케이스를 찾아내려고 애쓰는 동시에
+유닛 테스트로 많은 양의 예시 케이스를 작성하고 있는
+자신을 발견한다면, <a href="https://docs.rs/proptest"><code>proptest</code></a>를 살펴봐야 합니다.
+만약 임의의 파일을 사용하고, 그 파일을 파싱하는 프로그램을 만든다면
+엣지 케이스에서 버그를 찾기 위해 <a href="https://rust-fuzz.github.io/book/introduction.html">fuzzer</a>를 사용해볼 수 있습니다.</p>
+<aside>
+<p><strong>참고:</strong>
+이 챕터에서 사용된 전체 코드는 <a href="https://github.com/parksb/rust-cli-book-ko-kr/tree/master/src/tutorial/testing">이 책의 저장소</a>에서
+찾아볼 수 있습니다.</p>
+</aside>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../tutorial/output.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../tutorial/packaging.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../tutorial/output.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../tutorial/packaging.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
